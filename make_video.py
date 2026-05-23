@@ -13,7 +13,7 @@ import sys
 import numpy as np
 from PIL import Image, ImageFilter, ImageEnhance
 from moviepy import (
-    ImageClip, VideoFileClip, CompositeVideoClip,
+    ImageClip, VideoClip, VideoFileClip, CompositeVideoClip,
     concatenate_videoclips, ColorClip, TextClip
 )
 from moviepy.video.fx import CrossFadeIn, CrossFadeOut
@@ -87,7 +87,7 @@ def ken_burns(img_path: str, duration: float, output_size: tuple,
         frame = np.array(Image.fromarray(crop).resize((W, H), Image.LANCZOS))
         return frame
 
-    return ImageClip(make_frame, duration=duration)
+    return VideoClip(make_frame, duration=duration).with_fps(FPS)
 
 
 def add_caption(clip: ImageClip, text: str, duration: float) -> CompositeVideoClip:
@@ -103,7 +103,7 @@ def add_caption(clip: ImageClip, text: str, duration: float) -> CompositeVideoCl
         text=text,
         font_size=44,
         color="white",
-        font="DejaVu-Sans-Bold",
+        font="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
         method="label",
         size=(W - 80, None),
         text_align="center",
