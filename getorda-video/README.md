@@ -12,6 +12,10 @@ npx remotion render GetOrda out/GetOrda-Promo-4K.mp4 --scale=2 --crf=14 --x264-p
 
 The composition is authored at 1920x1080 and `--scale=2` renders a native 3840x2160 master. Preview with `npm run dev`.
 
+## Product photos
+
+`public/products/` is gitignored because this repo is public and the photos include third-party product images. Drop the product JPG/PNG files there before rendering.
+
 ## Structure
 
 - `src/timeline.ts`: scene start frames (120 BPM, so every cut lands on a bar)
