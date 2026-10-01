@@ -11,3 +11,6 @@ public/audio/*.wav
 
 # Product photos (third-party + catalog crops); kept out of this public repo
 public/products/
+
+# Unsplash stock photos (downloaded via the Unsplash connector); kept out of the public repo
+public/stock/

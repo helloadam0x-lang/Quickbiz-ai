@@ -1,38 +1,32 @@
 import React from "react";
 import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { Audio } from "@remotion/media";
-import { tween, EASE_IN } from "./anim";
-import { SCENES, T } from "./timeline";
-import { Hook } from "./scenes/Hook";
-import { Never } from "./scenes/Never";
-import { Meet } from "./scenes/Meet";
-import { Chat } from "./scenes/Chat";
-import { Approve } from "./scenes/Approve";
-import { Store } from "./scenes/Store";
-import { Broadcast } from "./scenes/Broadcast";
-import { Analytics } from "./scenes/Analytics";
-import { Outro } from "./scenes/Outro";
+import { tween } from "./anim";
+import { SCENES, SceneKey, T } from "./timeline";
+import { S01Hook } from "./scenes/S01Hook";
+import { S02Buzz } from "./scenes/S02Buzz";
+import { S03Lost } from "./scenes/S03Lost";
+import { S04Meet } from "./scenes/S04Meet";
+import { S05Chat } from "./scenes/S05Chat";
+import { S06Needs } from "./scenes/S06Needs";
+import { S07Store } from "./scenes/S07Store";
+import { S08Broadcast } from "./scenes/S08Broadcast";
+import { S09Tagline } from "./scenes/S09Tagline";
+import { S10Outro } from "./scenes/S10Outro";
 
-type Cut = "blur" | "none";
+type Enter = "blur" | "fade" | "none";
 
-// Cross-cut: outgoing scene zooms up and blurs away while the next one
-// settles in from slightly smaller, the move the reference reels use.
-const Wrap: React.FC<{ len: number; enter: Cut; exit: Cut; children: React.ReactNode }> = ({
-  len,
-  enter,
-  exit,
-  children,
-}) => {
+// Scenes animate their own exits; the incoming one settles in from slightly small and soft.
+const Enter: React.FC<{ kind: Enter; children: React.ReactNode }> = ({ kind, children }) => {
   const f = useCurrentFrame();
-  const inP = enter === "blur" ? tween(f, 0, 2 * T) : 1;
-  const outP = exit === "blur" ? tween(f, len, len + 2 * T, 0, 1, EASE_IN) : 0;
-  const scale = (0.9 + 0.1 * inP) * (1 + 0.1 * outP);
+  if (kind === "none") return <AbsoluteFill>{children}</AbsoluteFill>;
+  const p = tween(f, 0, 2 * T);
   return (
     <AbsoluteFill
       style={{
-        opacity: Math.min(inP, 1 - outP),
-        transform: `scale(${scale})`,
-        filter: inP < 1 || outP > 0 ? `blur(${(1 - inP) * 22 + outP * 26}px)` : undefined,
+        opacity: p,
+        transform: kind === "blur" ? `scale(${0.94 + 0.06 * p})` : undefined,
+        filter: kind === "blur" && p < 1 ? `blur(${(1 - p) * 20}px)` : undefined,
       }}
     >
       {children}
@@ -40,32 +34,31 @@ const Wrap: React.FC<{ len: number; enter: Cut; exit: Cut; children: React.React
   );
 };
 
-const SCENE_LIST: { key: keyof typeof SCENES; C: React.FC; enter: Cut; exit: Cut }[] = [
-  { key: "hook", C: Hook, enter: "none", exit: "none" },
-  { key: "never", C: Never, enter: "blur", exit: "none" },
-  { key: "meet", C: Meet, enter: "none", exit: "none" },
-  { key: "chat", C: Chat, enter: "blur", exit: "blur" },
-  { key: "approve", C: Approve, enter: "blur", exit: "blur" },
-  { key: "store", C: Store, enter: "blur", exit: "blur" },
-  { key: "broadcast", C: Broadcast, enter: "blur", exit: "blur" },
-  { key: "analytics", C: Analytics, enter: "blur", exit: "blur" },
-  { key: "outro", C: Outro, enter: "blur", exit: "none" },
+const LIST: { key: SceneKey; C: React.FC; enter: Enter }[] = [
+  { key: "hook", C: S01Hook, enter: "none" },
+  { key: "buzz", C: S02Buzz, enter: "fade" },
+  { key: "lost", C: S03Lost, enter: "blur" },
+  { key: "meet", C: S04Meet, enter: "fade" },
+  { key: "chat", C: S05Chat, enter: "blur" },
+  { key: "needs", C: S06Needs, enter: "blur" },
+  { key: "store", C: S07Store, enter: "blur" },
+  { key: "broadcast", C: S08Broadcast, enter: "blur" },
+  { key: "tagline", C: S09Tagline, enter: "blur" },
+  { key: "outro", C: S10Outro, enter: "fade" },
 ];
 
-export const Main: React.FC = () => {
-  return (
-    <AbsoluteFill style={{ backgroundColor: "#030605" }}>
-      {SCENE_LIST.map(({ key, C, enter, exit }) => {
-        const { start, len } = SCENES[key];
-        return (
-          <Sequence key={key} from={start - T} durationInFrames={len + 2 * T} name={key}>
-            <Wrap len={len} enter={enter} exit={exit}>
-              <C />
-            </Wrap>
-          </Sequence>
-        );
-      })}
-      <Audio src={staticFile("audio/getorda-mix.wav")} />
-    </AbsoluteFill>
-  );
-};
+export const Main: React.FC = () => (
+  <AbsoluteFill style={{ backgroundColor: "#FBFDFE" }}>
+    {LIST.map(({ key, C, enter }) => {
+      const { start, len } = SCENES[key];
+      return (
+        <Sequence key={key} from={start - T} durationInFrames={len + 2 * T} name={key}>
+          <Enter kind={start === 0 ? "none" : enter}>
+            <C />
+          </Enter>
+        </Sequence>
+      );
+    })}
+    <Audio src={staticFile("audio/getorda-v2-mix.wav")} />
+  </AbsoluteFill>
+);
