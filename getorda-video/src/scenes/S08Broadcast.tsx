@@ -134,7 +134,9 @@ export const S08Broadcast: React.FC = () => {
             const ang = rand(i) * Math.PI * 2;
             const rr = 0.75 + rand(i + 50) * 0.5;
             const tx = 960 + Math.cos(ang) * 1100 * rr;
-            const ty = 560 + Math.sin(ang) * 620 * rr;
+            // Keep the burst out of the headline band so no avatar lands on "one tap".
+            const ty0 = 560 + Math.sin(ang) * 620 * rr;
+            const ty = ty0 < 300 ? 620 + (300 - ty0) * 0.9 : ty0;
             const tz = -500 + rand(i + 99) * 900;
             const k = Math.min(1, s);
             const photo = i < PHOTOS.length * 3 && i % 2 === 0;
