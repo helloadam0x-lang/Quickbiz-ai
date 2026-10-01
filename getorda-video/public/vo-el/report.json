@@ -1,0 +1,43 @@
+{
+  "variants": {
+    "jessica-v2": {
+      "voice": "Jessica",
+      "model": "eleven_multilingual_v2",
+      "lines": {},
+      "error": "URL error /v1/text-to-speech/cgSgspJ2msm6clMCkdW9/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    "sarah-v2": {
+      "voice": "Sarah",
+      "model": "eleven_multilingual_v2",
+      "lines": {},
+      "error": "URL error /v1/text-to-speech/EXAVITQu4vr4xnSDxMaL/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    "jessica-v3": {
+      "voice": "Jessica",
+      "model": "eleven_v3",
+      "lines": {},
+      "error": "URL error /v1/text-to-speech/cgSgspJ2msm6clMCkdW9/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  },
+  "customers": {},
+  "errors": [
+    "URL error /v1/user/subscription: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "URL error /v1/shared-voices: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "c1: URL error /v1/text-to-speech/bIHbv24MWmeRgasZH58o/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "c2: URL error /v1/text-to-speech/pFZP5JQG7iQjIQuC4Bku/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "c3: URL error /v1/text-to-speech/iP95p4xoKVk53GoZ742B/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "c4: URL error /v1/text-to-speech/XB0fDUnXU5powFXDhCwa/with-timestamps: <urlopen error Tunnel connection failed: 403 Forbidden>"
+  ],
+  "format": null
+}
