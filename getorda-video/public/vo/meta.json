@@ -1,0 +1,82 @@
+{
+ "l01": {
+  "dur": 0.978,
+  "text": "Let me guess.",
+  "voice": "af_heart"
+ },
+ "l02": {
+  "dur": 2.389,
+  "text": "Your phone hasn't stopped buzzing since morning.",
+  "voice": "af_heart"
+ },
+ "c1": {
+  "dur": 1.728,
+  "text": "Hey, how much is this one?",
+  "voice": "am_michael"
+ },
+ "c2": {
+  "dur": 1.365,
+  "text": "Is it still available?",
+  "voice": "bf_emma"
+ },
+ "c3": {
+  "dur": 1.856,
+  "text": "Can you deliver to Ntinda today?",
+  "voice": "am_adam"
+ },
+ "c4": {
+  "dur": 1.28,
+  "text": "Hello? Are you there?",
+  "voice": "af_nicole"
+ },
+ "l03": {
+  "dur": 3.157,
+  "text": "And every message you miss... is a sale you just lost.",
+  "voice": "af_heart"
+ },
+ "l04": {
+  "dur": 1.067,
+  "text": "Meet GetOrda.",
+  "voice": "af_heart"
+ },
+ "l05": {
+  "dur": 2.667,
+  "text": "Your AI employee, right inside WhatsApp.",
+  "voice": "af_heart"
+ },
+ "l06": {
+  "dur": 4.971,
+  "text": "It answers every customer, in their own language, from your real products and prices.",
+  "voice": "af_heart"
+ },
+ "l07": {
+  "dur": 5.248,
+  "text": "It takes the order, shares your mobile money details, and tracks it all the way to their door.",
+  "voice": "af_heart"
+ },
+ "l08": {
+  "dur": 2.375,
+  "text": "And it only calls you when it truly needs you.",
+  "voice": "af_heart"
+ },
+ "l09": {
+  "dur": 1.856,
+  "text": "Your own store, live in a minute.",
+  "voice": "af_heart"
+ },
+ "l10": {
+  "dur": 2.261,
+  "text": "Your best customers, back in one tap.",
+  "voice": "af_heart"
+ },
+ "l11": {
+  "dur": 2.155,
+  "text": "Every customer. Always answered.",
+  "voice": "af_heart"
+ },
+ "l12": {
+  "dur": 2.773,
+  "text": "GetOrda. Start free, at getorda dot app.",
+  "voice": "af_heart"
+ }
+}

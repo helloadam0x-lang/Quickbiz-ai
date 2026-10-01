@@ -1,0 +1,201 @@
+{
+  "variants": {
+    "jessica-v2": {
+      "voice": "Jessica",
+      "model": "eleven_multilingual_v2",
+      "lines": {
+        "l01": {
+          "file": "jessica-v2/l01.mp3",
+          "speech_end": 1.161
+        },
+        "l02": {
+          "file": "jessica-v2/l02.mp3",
+          "speech_end": 2.647
+        },
+        "l03": {
+          "file": "jessica-v2/l03.mp3",
+          "speech_end": 4.133
+        },
+        "l04": {
+          "file": "jessica-v2/l04.mp3",
+          "speech_end": 1.393
+        },
+        "l05": {
+          "file": "jessica-v2/l05.mp3",
+          "speech_end": 3.622
+        },
+        "l06": {
+          "file": "jessica-v2/l06.mp3",
+          "speech_end": 4.783
+        },
+        "l07": {
+          "file": "jessica-v2/l07.mp3",
+          "speech_end": 5.108
+        },
+        "l08": {
+          "file": "jessica-v2/l08.mp3",
+          "speech_end": 3.483
+        },
+        "l09": {
+          "file": "jessica-v2/l09.mp3",
+          "speech_end": 2.601
+        },
+        "l10": {
+          "file": "jessica-v2/l10.mp3",
+          "speech_end": 2.554
+        },
+        "l11": {
+          "file": "jessica-v2/l11.mp3",
+          "speech_end": 2.415
+        },
+        "l12": {
+          "file": "jessica-v2/l12.mp3",
+          "speech_end": 3.529
+        }
+      }
+    },
+    "sarah-v2": {
+      "voice": "Sarah",
+      "model": "eleven_multilingual_v2",
+      "lines": {
+        "l01": {
+          "file": "sarah-v2/l01.mp3",
+          "speech_end": 0.975
+        },
+        "l02": {
+          "file": "sarah-v2/l02.mp3",
+          "speech_end": 2.601
+        },
+        "l03": {
+          "file": "sarah-v2/l03.mp3",
+          "speech_end": 3.529
+        },
+        "l04": {
+          "file": "sarah-v2/l04.mp3",
+          "speech_end": 1.3
+        },
+        "l05": {
+          "file": "sarah-v2/l05.mp3",
+          "speech_end": 2.833
+        },
+        "l06": {
+          "file": "sarah-v2/l06.mp3",
+          "speech_end": 5.944
+        },
+        "l07": {
+          "file": "sarah-v2/l07.mp3",
+          "speech_end": 5.48
+        },
+        "l08": {
+          "file": "sarah-v2/l08.mp3",
+          "speech_end": 2.879
+        },
+        "l09": {
+          "file": "sarah-v2/l09.mp3",
+          "speech_end": 1.765
+        },
+        "l10": {
+          "file": "sarah-v2/l10.mp3",
+          "speech_end": 2.229
+        },
+        "l11": {
+          "file": "sarah-v2/l11.mp3",
+          "speech_end": 2.508
+        },
+        "l12": {
+          "file": "sarah-v2/l12.mp3",
+          "speech_end": 3.483
+        }
+      }
+    },
+    "jessica-v3": {
+      "voice": "Jessica",
+      "model": "eleven_v3",
+      "lines": {
+        "l01": {
+          "file": "jessica-v3/l01.mp3",
+          "speech_end": 1.04
+        },
+        "l02": {
+          "file": "jessica-v3/l02.mp3",
+          "speech_end": 2.72
+        },
+        "l03": {
+          "file": "jessica-v3/l03.mp3",
+          "speech_end": 3.44
+        },
+        "l04": {
+          "file": "jessica-v3/l04.mp3",
+          "speech_end": 1.36
+        },
+        "l05": {
+          "file": "jessica-v3/l05.mp3",
+          "speech_end": 2.96
+        },
+        "l06": {
+          "file": "jessica-v3/l06.mp3",
+          "speech_end": 5.44
+        },
+        "l07": {
+          "file": "jessica-v3/l07.mp3",
+          "speech_end": 5.28
+        },
+        "l08": {
+          "file": "jessica-v3/l08.mp3",
+          "speech_end": 3.36
+        },
+        "l09": {
+          "file": "jessica-v3/l09.mp3",
+          "speech_end": 2.64
+        },
+        "l10": {
+          "file": "jessica-v3/l10.mp3",
+          "speech_end": 2.72
+        },
+        "l11": {
+          "file": "jessica-v3/l11.mp3",
+          "speech_end": 2.56
+        },
+        "l12": {
+          "file": "jessica-v3/l12.mp3",
+          "speech_end": 3.92
+        }
+      }
+    }
+  },
+  "customers": {
+    "c1": {
+      "voice": "Will",
+      "file": "customers/c1.mp3",
+      "speech_end": 1.486
+    },
+    "c2": {
+      "voice": "Lily",
+      "file": "customers/c2.mp3",
+      "speech_end": 1.347
+    },
+    "c3": {
+      "voice": "Chris",
+      "file": "customers/c3.mp3",
+      "speech_end": 1.718
+    }
+  },
+  "errors": [
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"8e0b3e5a8a29e150922cb88df1074c9d\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"33419ef73fa744609533f61ceac9a1a8\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"ff21ab2ac303bd39668f6ed1a0c08ccc\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"b37c6b28a53ef775d4d0ff0e4c5ef2d9\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"c15f24b958e3349fd2a631da13eaf7b1\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"d9422f19a519fce241eb202a9d405b3e\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"bf289a2f847d7f3bb5efd291124c4275\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"b34092f17512b9e4790ea51f754db1ca\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"b714c556424352b38fbabb5eb316d47a\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"a8dc4e531833898dc8c555f843e0aaf1\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"e314685a27bbccabd4839d86cf107bfb\",\"param\":\"sort\"}}",
+    "HTTP 400 /v1/shared-voices: {\"detail\":{\"type\":\"validation_error\",\"code\":\"invalid_parameters\",\"message\":\"Invalid sort received: usage_character_count_7d, must be one of: created_date, usage_character_count_1y, trending, cloned_by_count.\",\"status\":\"invalid_sort\",\"request_id\":\"a9d53252321e2101110ab8d310407192\",\"param\":\"sort\"}}",
+    "c4: HTTP 402 /v1/text-to-speech/XB0fDUnXU5powFXDhCwa/with-timestamps: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Free users cannot use library voices via the API. Please upgrade your subscription to use this voice.\",\"status\":\"payment_required\",\"request_id\":\"dc5f83ba3b15ba4f37848c54f7615b79\"}}"
+  ],
+  "format": "mp3_44100_128",
+  "tier": "free",
+  "chars_left": 10000
+}

@@ -1,0 +1,602 @@
+{
+ "l01": {
+  "start": 0.55,
+  "dur": 0.85,
+  "text": "Let me guess.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Let",
+    "t": 0.0
+   },
+   {
+    "w": "me",
+    "t": 0.209
+   },
+   {
+    "w": "guess.",
+    "t": 0.325
+   }
+  ]
+ },
+ "l02": {
+  "start": 1.65,
+  "dur": 2.49,
+  "text": "Your phone hasn't stopped buzzing since morning.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Your",
+    "t": 0.0
+   },
+   {
+    "w": "phone",
+    "t": 0.267
+   },
+   {
+    "w": "hasn't",
+    "t": 0.546
+   },
+   {
+    "w": "stopped",
+    "t": 0.824
+   },
+   {
+    "w": "buzzing",
+    "t": 1.149
+   },
+   {
+    "w": "since",
+    "t": 1.509
+   },
+   {
+    "w": "morning.",
+    "t": 1.788
+   }
+  ]
+ },
+ "c1": {
+  "start": 4.35,
+  "dur": 1.19,
+  "text": "Hey, how much is this one?",
+  "voice": "el-customer",
+  "pan": -0.35,
+  "words": [
+   {
+    "w": "Hey,",
+    "t": 0.0
+   },
+   {
+    "w": "how",
+    "t": 0.337
+   },
+   {
+    "w": "much",
+    "t": 0.464
+   },
+   {
+    "w": "is",
+    "t": 0.627
+   },
+   {
+    "w": "this",
+    "t": 0.72
+   },
+   {
+    "w": "one?",
+    "t": 0.906
+   }
+  ]
+ },
+ "c2": {
+  "start": 5.25,
+  "dur": 1.19,
+  "text": "Is it still available?",
+  "voice": "el-customer",
+  "pan": 0.15,
+  "words": [
+   {
+    "w": "Is",
+    "t": 0.0
+   },
+   {
+    "w": "it",
+    "t": 0.244
+   },
+   {
+    "w": "still",
+    "t": 0.372
+   },
+   {
+    "w": "available?",
+    "t": 0.639
+   }
+  ]
+ },
+ "c3": {
+  "start": 6.05,
+  "dur": 1.0,
+  "text": "Can you deliver today?",
+  "voice": "el-customer",
+  "pan": -0.35,
+  "words": [
+   {
+    "w": "Can",
+    "t": 0.0
+   },
+   {
+    "w": "you",
+    "t": 0.221
+   },
+   {
+    "w": "deliver",
+    "t": 0.337
+   },
+   {
+    "w": "today?",
+    "t": 0.662
+   }
+  ]
+ },
+ "c4": {
+  "start": 7.15,
+  "dur": 1.24,
+  "text": "Hello? Are you there?",
+  "voice": "el-customer",
+  "pan": 0.45,
+  "words": [
+   {
+    "w": "Hello?",
+    "t": 0.0
+   },
+   {
+    "w": "Are",
+    "t": 0.546
+   },
+   {
+    "w": "you",
+    "t": 0.743
+   },
+   {
+    "w": "there?",
+    "t": 0.871
+   }
+  ]
+ },
+ "l03": {
+  "start": 8.55,
+  "dur": 3.499,
+  "text": "And every message you miss... is a sale you just lost.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "And",
+    "t": 0.0
+   },
+   {
+    "w": "every",
+    "t": 0.302
+   },
+   {
+    "w": "message",
+    "t": 0.604
+   },
+   {
+    "w": "you",
+    "t": 0.929
+   },
+   {
+    "w": "miss...",
+    "t": 1.08
+   },
+   {
+    "w": "is",
+    "t": 1.498
+   },
+   {
+    "w": "a",
+    "t": 1.718
+   },
+   {
+    "w": "sale",
+    "t": 1.8
+   },
+   {
+    "w": "you",
+    "t": 2.136
+   },
+   {
+    "w": "just",
+    "t": 2.31
+   },
+   {
+    "w": "lost.",
+    "t": 2.577
+   }
+  ]
+ },
+ "l04": {
+  "start": 12.25,
+  "dur": 1.12,
+  "text": "Meet GetOrda.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Meet",
+    "t": 0.0
+   },
+   {
+    "w": "GetOrda.",
+    "t": 0.372
+   }
+  ]
+ },
+ "l05": {
+  "start": 13.7,
+  "dur": 2.76,
+  "text": "Your AI employee, right inside WhatsApp.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Your",
+    "t": 0.0
+   },
+   {
+    "w": "AI",
+    "t": 0.302
+   },
+   {
+    "w": "employee,",
+    "t": 0.65
+   },
+   {
+    "w": "right",
+    "t": 1.277
+   },
+   {
+    "w": "inside",
+    "t": 1.556
+   },
+   {
+    "w": "WhatsApp.",
+    "t": 2.009
+   }
+  ]
+ },
+ "l06": {
+  "start": 16.85,
+  "dur": 5.57,
+  "text": "It answers every customer, in their own language, from your real products and prices.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "It",
+    "t": 0.0
+   },
+   {
+    "w": "answers",
+    "t": 0.267
+   },
+   {
+    "w": "every",
+    "t": 0.801
+   },
+   {
+    "w": "customer,",
+    "t": 1.242
+   },
+   {
+    "w": "in",
+    "t": 1.846
+   },
+   {
+    "w": "their",
+    "t": 1.997
+   },
+   {
+    "w": "own",
+    "t": 2.218
+   },
+   {
+    "w": "language,",
+    "t": 2.461
+   },
+   {
+    "w": "from",
+    "t": 3.117
+   },
+   {
+    "w": "your",
+    "t": 3.396
+   },
+   {
+    "w": "real",
+    "t": 3.64
+   },
+   {
+    "w": "products",
+    "t": 3.953
+   },
+   {
+    "w": "and",
+    "t": 4.545
+   },
+   {
+    "w": "prices.",
+    "t": 4.731
+   }
+  ]
+ },
+ "l07": {
+  "start": 22.54,
+  "dur": 5.19,
+  "text": "It takes the order, shares your mobile money details, and tracks it all the way to their door.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "It",
+    "t": 0.0
+   },
+   {
+    "w": "takes",
+    "t": 0.174
+   },
+   {
+    "w": "the",
+    "t": 0.464
+   },
+   {
+    "w": "order,",
+    "t": 0.615
+   },
+   {
+    "w": "shares",
+    "t": 1.126
+   },
+   {
+    "w": "your",
+    "t": 1.509
+   },
+   {
+    "w": "mobile",
+    "t": 1.66
+   },
+   {
+    "w": "money",
+    "t": 1.962
+   },
+   {
+    "w": "details,",
+    "t": 2.252
+   },
+   {
+    "w": "and",
+    "t": 2.938
+   },
+   {
+    "w": "tracks",
+    "t": 3.229
+   },
+   {
+    "w": "it",
+    "t": 3.577
+   },
+   {
+    "w": "all",
+    "t": 3.728
+   },
+   {
+    "w": "the",
+    "t": 3.995
+   },
+   {
+    "w": "way",
+    "t": 4.099
+   },
+   {
+    "w": "to",
+    "t": 4.25
+   },
+   {
+    "w": "their",
+    "t": 4.355
+   },
+   {
+    "w": "door.",
+    "t": 4.564
+   }
+  ]
+ },
+ "l08": {
+  "start": 27.95,
+  "dur": 2.859,
+  "text": "And it only calls you when it truly needs you.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "And",
+    "t": 0.0
+   },
+   {
+    "w": "it",
+    "t": 0.255
+   },
+   {
+    "w": "only",
+    "t": 0.372
+   },
+   {
+    "w": "calls",
+    "t": 0.65
+   },
+   {
+    "w": "you",
+    "t": 1.045
+   },
+   {
+    "w": "when",
+    "t": 1.231
+   },
+   {
+    "w": "it",
+    "t": 1.416
+   },
+   {
+    "w": "truly",
+    "t": 1.533
+   },
+   {
+    "w": "needs",
+    "t": 2.032
+   },
+   {
+    "w": "you.",
+    "t": 2.345
+   }
+  ]
+ },
+ "l09": {
+  "start": 30.929,
+  "dur": 1.71,
+  "text": "Your own store, live in a minute.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Your",
+    "t": 0.0
+   },
+   {
+    "w": "own",
+    "t": 0.267
+   },
+   {
+    "w": "store,",
+    "t": 0.441
+   },
+   {
+    "w": "live",
+    "t": 0.848
+   },
+   {
+    "w": "in",
+    "t": 1.045
+   },
+   {
+    "w": "a",
+    "t": 1.126
+   },
+   {
+    "w": "minute.",
+    "t": 1.184
+   }
+  ]
+ },
+ "l10": {
+  "start": 33.2,
+  "dur": 2.15,
+  "text": "Your best customers, back in one tap.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Your",
+    "t": 0.0
+   },
+   {
+    "w": "best",
+    "t": 0.244
+   },
+   {
+    "w": "customers,",
+    "t": 0.522
+   },
+   {
+    "w": "back",
+    "t": 1.149
+   },
+   {
+    "w": "in",
+    "t": 1.382
+   },
+   {
+    "w": "one",
+    "t": 1.509
+   },
+   {
+    "w": "tap.",
+    "t": 1.707
+   }
+  ]
+ },
+ "l11": {
+  "start": 36.15,
+  "dur": 2.408,
+  "text": "Every customer. Always answered.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "Every",
+    "t": 0.0
+   },
+   {
+    "w": "customer.",
+    "t": 0.383
+   },
+   {
+    "w": "Always",
+    "t": 1.057
+   },
+   {
+    "w": "answered.",
+    "t": 1.486
+   }
+  ]
+ },
+ "l12": {
+  "start": 39.15,
+  "dur": 3.23,
+  "text": "GetOrda. Start free, at getorda dot app.",
+  "voice": "sarah-v2",
+  "pan": 0,
+  "words": [
+   {
+    "w": "GetOrda.",
+    "t": 0.0
+   },
+   {
+    "w": "Start",
+    "t": 0.985
+   },
+   {
+    "w": "free,",
+    "t": 1.356
+   },
+   {
+    "w": "at",
+    "t": 1.693
+   },
+   {
+    "w": "getorda",
+    "t": 1.949
+   },
+   {
+    "w": "dot",
+    "t": 2.552
+   },
+   {
+    "w": "app.",
+    "t": 2.877
+   }
+  ]
+ }
+}

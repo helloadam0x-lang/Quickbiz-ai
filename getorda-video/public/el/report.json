@@ -1,0 +1,98 @@
+{
+  "customers": {
+    "c1": {
+      "voice": "Will",
+      "format": "mp3_44100_128"
+    },
+    "c2": {
+      "voice": "Lily",
+      "format": "mp3_44100_128"
+    },
+    "c3": {
+      "voice": "Chris",
+      "format": "mp3_44100_128"
+    },
+    "c4": {
+      "voice": "Laura",
+      "format": "mp3_44100_128"
+    }
+  },
+  "sfx": {
+    "whoosh_soft": [
+      "whoosh_soft_1.mp3",
+      "whoosh_soft_2.mp3"
+    ],
+    "whoosh_whip": [
+      "whoosh_whip_1.mp3",
+      "whoosh_whip_2.mp3"
+    ],
+    "riser_rush": [
+      "riser_rush_1.mp3",
+      "riser_rush_2.mp3"
+    ],
+    "logo_impact": [
+      "logo_impact_1.mp3",
+      "logo_impact_2.mp3"
+    ],
+    "notif": [
+      "notif_1.mp3",
+      "notif_2.mp3",
+      "notif_3.mp3"
+    ],
+    "success": [
+      "success_1.mp3",
+      "success_2.mp3"
+    ],
+    "stamp": [
+      "stamp_1.mp3",
+      "stamp_2.mp3"
+    ],
+    "clock": [
+      "clock_1.mp3"
+    ],
+    "card_flip": [
+      "card_flip_1.mp3",
+      "card_flip_2.mp3"
+    ],
+    "ui_build": [
+      "ui_build_1.mp3",
+      "ui_build_2.mp3"
+    ],
+    "burst": [
+      "burst_1.mp3",
+      "burst_2.mp3"
+    ],
+    "swell": [
+      "swell_1.mp3",
+      "swell_2.mp3"
+    ],
+    "confetti": [
+      "confetti_1.mp3",
+      "confetti_2.mp3"
+    ],
+    "typing": [
+      "typing_1.mp3"
+    ],
+    "sub_drop": [
+      "sub_drop_1.mp3",
+      "sub_drop_2.mp3"
+    ]
+  },
+  "music": {},
+  "errors": [
+    "sfx pop: HTTP 400 /v1/sound-generation: {\"detail\":{\"status\":\"invalid_generation_settings\",\"message\":\"Invalid setting for duration_seconds received, expected to be greater or equal to 0.5 and less or equal to 30, received 0.4.\"}}",
+    "sfx pop: HTTP 400 /v1/sound-generation: {\"detail\":{\"status\":\"invalid_generation_settings\",\"message\":\"Invalid setting for duration_seconds received, expected to be greater or equal to 0.5 and less or equal to 30, received 0.4.\"}}",
+    "sfx click: HTTP 400 /v1/sound-generation: {\"detail\":{\"status\":\"invalid_generation_settings\",\"message\":\"Invalid setting for duration_seconds received, expected to be greater or equal to 0.5 and less or equal to 30, received 0.3.\"}}",
+    "sfx click: HTTP 400 /v1/sound-generation: {\"detail\":{\"status\":\"invalid_generation_settings\",\"message\":\"Invalid setting for duration_seconds received, expected to be greater or equal to 0.5 and less or equal to 30, received 0.3.\"}}",
+    "sfx tick: HTTP 400 /v1/sound-generation: {\"detail\":{\"status\":\"invalid_generation_settings\",\"message\":\"Invalid setting for duration_seconds received, expected to be greater or equal to 0.5 and less or equal to 30, received 0.4.\"}}",
+    "sfx tick: HTTP 400 /v1/sound-generation: {\"detail\":{\"status\":\"invalid_generation_settings\",\"message\":\"Invalid setting for duration_seconds received, expected to be greater or equal to 0.5 and less or equal to 30, received 0.4.\"}}",
+    "music plan: HTTP 402 /v1/music: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Music API is not available for free users. Please upgrade to a paid plan to use the API.\",\"status\":\"limited_access\",\"request_id\":\"c0e7fe8aed4defd92ee25c55457322e6\"}}",
+    "music plan: HTTP 402 /v1/music: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Music API is not available for free users. Please upgrade to a paid plan to use the API.\",\"status\":\"limited_access\",\"request_id\":\"f4892ea3bfb40c4dc92408d0491f4bdd\"}}",
+    "music prompt: HTTP 402 /v1/music: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Music API is not available for free users. Please upgrade to a paid plan to use the API.\",\"status\":\"limited_access\",\"request_id\":\"c8b874b4ec6557ced23b874fcec733c3\"}}",
+    "music plan: HTTP 402 /v1/music: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Music API is not available for free users. Please upgrade to a paid plan to use the API.\",\"status\":\"limited_access\",\"request_id\":\"baf7b9379f7b780d2d472138adcba694\"}}",
+    "music plan: HTTP 402 /v1/music: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Music API is not available for free users. Please upgrade to a paid plan to use the API.\",\"status\":\"limited_access\",\"request_id\":\"76f8e274bbe682c73d31b489d59e3a01\"}}",
+    "music prompt: HTTP 402 /v1/music: {\"detail\":{\"type\":\"payment_required\",\"code\":\"paid_plan_required\",\"message\":\"Music API is not available for free users. Please upgrade to a paid plan to use the API.\",\"status\":\"limited_access\",\"request_id\":\"9c10b128f361b2589c5d5d3e91dda16e\"}}"
+  ],
+  "tier": "free",
+  "chars_left_before": 9652
+}
