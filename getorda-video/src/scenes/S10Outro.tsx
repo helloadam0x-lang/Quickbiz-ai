@@ -11,12 +11,17 @@ import { cam, CamKeys, E, kf, rand } from "../motion";
 import { C, FONT } from "../theme";
 import { P } from "../products";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 const BACK = [P.madrid, P.supreme, P.asics, P.london, P.cerave, P.paris, P.nivea, P.perfume];
 
 export const S10Outro: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l12", "outro").map((x) => x.f);
+  const V = useVertical();
+  // Vertical: the stack moves to the frame's center line and the product ring becomes a tall ellipse.
+  const X = V ? 540 : 960;
+  const Y = V ? { logo: 860, tag: 1040, cta: 1170, foot: 1290 } : { logo: 430, tag: 612, cta: 735, foot: 850 };
   // l12: GetOrda. Start free, at getorda dot app.
   const K: CamKeys = { z: [[0, -60], [198, 130, E.inOut]], ry: [[0, -7], [198, 5, E.inOut]], rx: [[0, 5], [198, -1, E.inOut]] };
   const c = cam(f, K);
@@ -44,8 +49,8 @@ export const S10Outro: React.FC = () => {
             return (
               <Layer
                 key={p.name}
-                x={960 + Math.cos(ang) * 1500}
-                y={520 + Math.sin(ang) * 800 + Math.sin((f + i * 30) / 22) * 14}
+                x={V ? 540 + Math.cos(ang) * 800 : 960 + Math.cos(ang) * 1500}
+                y={(V ? 900 + Math.sin(ang) * 1500 : 520 + Math.sin(ang) * 800) + Math.sin((f + i * 30) / 22) * 14}
                 z={-900 - rand(i) * 500}
                 rz={(rand(i + 4) - 0.5) * 16}
                 o={backIn * 0.85}
@@ -58,10 +63,10 @@ export const S10Outro: React.FC = () => {
               </Layer>
             );
           })}
-          <Layer x={960} y={420} z={-300} o={0.9}>
+          <Layer x={X} y={Y.logo - 10} z={-300} o={0.9}>
             <div style={{ width: 1100, height: 1100, borderRadius: "50%", background: "radial-gradient(circle, rgba(109,212,241,0.42) 0%, rgba(109,212,241,0) 62%)" }} />
           </Layer>
-          <Layer x={960} y={430} z={0}>
+          <Layer x={X} y={Y.logo} z={0}>
             <div style={{ display: "flex", alignItems: "center", fontFamily: FONT, transformStyle: "preserve-3d" }}>
               <div
                 style={{
@@ -78,12 +83,12 @@ export const S10Outro: React.FC = () => {
               </div>
             </div>
           </Layer>
-          <Layer x={960} y={612} z={30} o={tag}>
+          <Layer x={X} y={Y.tag} z={30} o={tag}>
             <div style={{ fontFamily: FONT, fontSize: 42, fontWeight: 500, color: C.sub, letterSpacing: "-0.02em", whiteSpace: "nowrap", filter: `blur(${(1 - tag) * 10}px)` }}>
               The AI employee for your WhatsApp business.
             </div>
           </Layer>
-          <Layer x={960} y={735} z={70} s={cta * (1 - 0.05 * press)} o={Math.min(1, cta)}>
+          <Layer x={X} y={Y.cta} z={70} s={cta * (1 - 0.05 * press)} o={Math.min(1, cta)}>
             <div style={{ position: "relative" }}>
               <div
                 style={{
@@ -124,19 +129,28 @@ export const S10Outro: React.FC = () => {
               </div>
             </div>
           </Layer>
-          <Layer x={960} y={850} z={40} o={foot}>
+          <Layer x={X} y={Y.foot} z={40} o={foot}>
             <div style={{ fontFamily: FONT, fontSize: 27, color: C.mute, fontWeight: 500, whiteSpace: "nowrap" }}>No card needed · Live on your WhatsApp in minutes</div>
           </Layer>
           <Layer x={0} y={0} z={90} center={false}>
-            <div style={{ position: "relative", width: 1920, height: 1080 }}>
+            <div style={{ position: "relative", width: V ? 1080 : 1920, height: V ? 1920 : 1080 }}>
               <Cursor
                 f={f}
-                keys={[
-                  { f: w[2], x: 1520, y: 1080 },
-                  { f: click - 6, x: 1180, y: 770 },
-                  { f: click + 20, x: 1190, y: 778 },
-                  { f: 190, x: 1320, y: 920 },
-                ]}
+                keys={
+                  V
+                    ? [
+                        { f: w[2], x: 900, y: 1820 },
+                        { f: click - 6, x: 700, y: 1200 },
+                        { f: click + 20, x: 710, y: 1208 },
+                        { f: 190, x: 820, y: 1500 },
+                      ]
+                    : [
+                        { f: w[2], x: 1520, y: 1080 },
+                        { f: click - 6, x: 1180, y: 770 },
+                        { f: click + 20, x: 1190, y: 778 },
+                        { f: 190, x: 1320, y: 920 },
+                      ]
+                }
                 clicks={[click]}
                 show={[w[2], 150]}
               />
@@ -148,7 +162,7 @@ export const S10Outro: React.FC = () => {
             style={{
               width: 200 + ring * 1600,
               height: 200 + ring * 1600,
-              marginTop: -220,
+              marginTop: V ? -200 : -220,
               borderRadius: "50%",
               border: `3px solid rgba(109,212,241,${0.8 * (1 - ring)})`,
               boxShadow: `0 0 160px rgba(109,212,241,${0.45 * (1 - ring)})`,
@@ -156,7 +170,7 @@ export const S10Outro: React.FC = () => {
           />
         </AbsoluteFill>
       </AbsoluteFill>
-      <Flare p={kf(f, [[0, 0], [5, 0.95, E.out], [42, 0, E.out]])} y={40} />
+      <Flare p={kf(f, [[0, 0], [5, 0.95, E.out], [42, 0, E.out]])} y={V ? 45 : 40} />
       <Flash p={kf(f, [[-10, 1], [14, 0, E.out]])} />
     </AbsoluteFill>
   );

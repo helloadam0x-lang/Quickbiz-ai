@@ -9,20 +9,20 @@ import { Avatar, Ticks } from "../components/WA";
 import { cam, camVel, CamKeys, E, kf } from "../motion";
 import { C, FONT, SH } from "../theme";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
-const CARD = { x: 480, y: 540 };
 
 export const S03Lost: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l03", "lost").map((x) => x.f);
   // l03: And every message you miss... is a sale you just lost.
   const lostAt = w[10];
-  const K: CamKeys = {
-    z: [[-10, 560], [30, 40], [lostAt - 2, 90, E.inOut], [lostAt + 4, 130, E.out], [118, 60, E.inOut]],
-    x: [[-10, CARD.x - 960], [30, -40], [lostAt, 0, E.inOut], [118, 30]],
-    y: [[-10, -40], [30, 0]],
-    ry: [[-10, 12], [40, 5], [118, -3]],
-  };
+  const V = useVertical();
+  const CARD = V ? { x: 540, y: 1150 } : { x: 480, y: 540 };
+  const z: CamKeys["z"] = [[-10, 560], [30, 40], [lostAt - 2, 90, E.inOut], [lostAt + 4, 130, E.out], [118, 60, E.inOut]];
+  const K: CamKeys = V
+    ? { z, x: [[-10, 0], [30, -10], [lostAt, 0, E.inOut], [118, 10]], y: [[-10, CARD.y - 960], [30, 30], [118, 40]], ry: [[-10, 8], [40, 3], [118, -2]] }
+    : { z, x: [[-10, CARD.x - 960], [30, -40], [lostAt, 0, E.inOut], [118, 30]], y: [[-10, -40], [30, 0]], ry: [[-10, 12], [40, 5], [118, -3]] };
   const c = cam(f, K);
   const v = camVel(f, K);
   const shake = f >= lostAt && f < lostAt + 10 ? Math.sin((f - lostAt) * 3.1) * (10 - (f - lostAt)) * 1.4 : 0;
@@ -39,7 +39,7 @@ export const S03Lost: React.FC = () => {
       <MotionBlur vx={v.vx} vy={v.vy} amount={0.2}>
         <AbsoluteFill style={{ transform: `translate(${shake}px, ${shake * 0.6}px)` }}>
           <World c={c}>
-            <Layer x={CARD.x} y={CARD.y} z={-fall * 280} rx={fall * 32} ry={8} o={1 - fall * 0.45}>
+            <Layer x={CARD.x} y={CARD.y} z={-fall * 280} rx={fall * 32} ry={8} o={1 - fall * 0.45} s={V ? 1.22 : 1}>
               <div style={{ width: 620, borderRadius: 34, background: C.waBg, boxShadow: SH.float, overflow: "hidden", fontFamily: FONT }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "20px 24px", background: "#fff" }}>
                   <Avatar src="stock/av-w1.jpg" size={58} />
@@ -88,11 +88,11 @@ export const S03Lost: React.FC = () => {
               </div>
             </Layer>
 
-            <Layer x={860} y={370} z={60} center={false}>
+            <Layer x={V ? 90 : 860} y={V ? 330 : 370} z={60} center={false}>
               <div style={{ whiteSpace: "nowrap" }}>
-                <Kinetic text="Every message you *miss…*" f={f} times={w.slice(1, 5)} size={70} weight={600} />
+                <Kinetic text="Every message you *miss…*" f={f} times={w.slice(1, 5)} size={V ? 76 : 70} weight={600} />
                 <div style={{ height: 14 }} />
-                <Kinetic text="is a sale you just *lost.*" f={f} times={w.slice(5, 11)} size={70} weight={600} />
+                <Kinetic text="is a sale you just *lost.*" f={f} times={w.slice(5, 11)} size={V ? 76 : 70} weight={600} />
                 <div style={{ marginTop: 34, display: "flex", gap: 12, opacity: kf(f, [[lostAt + 4, 0], [lostAt + 16, 1, E.out]]) }}>
                   <Pill tone="grey" size={22}>
                     <span style={{ textDecoration: "line-through", color: C.mute }}>UGX 100,000</span>

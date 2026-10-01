@@ -10,6 +10,7 @@ import { Photo } from "../components/AppUI";
 import { Avatar, Notif, Wave } from "../components/WA";
 import { C, FONT } from "../theme";
 import { BUZZ_PINGS, voAt, voWords } from "../timeline";
+import { useVertical } from "../format";
 
 type Row = { at: number; av?: string; name: string; msg: string; n: number };
 
@@ -79,20 +80,33 @@ const ChatList: React.FC<{ f: number }> = ({ f }) => {
 
 type Banner = { at: number; x: number; y: number; z: number; el: React.ReactNode };
 
-const PHONE = { x: 1300, y: 545 };
-const AMINA = { x: 1170, y: 150 };
-const BRIAN = { x: 600, y: 650 };
-const KATO = { x: 640, y: 880 };
-const GRACE = { x: 1540, y: 860 };
-
 // Opens inside the phone screen, pulls back, then the camera snaps to each customer as they
 // message (Brian, Amina, Kevin, Grace) before rushing into Amina's banner.
-const K: CamKeys = {
-  z: [[-10, 760], [40, 0], [77, 40], [93, 170], [104, 185], [120, 160], [128, 170], [144, 190], [161, 205], [177, 220], [212, 1100, E.in]],
-  x: [[-10, PHONE.x - 960], [40, 30], [77, -10], [93, BRIAN.x - 800], [104, BRIAN.x - 780], [120, AMINA.x - 1040], [128, AMINA.x - 1030], [144, KATO.x - 800], [161, KATO.x - 780], [177, GRACE.x - 1160], [212, AMINA.x - 900, E.in]],
-  y: [[-10, -150], [40, 0], [77, 0], [93, BRIAN.y - 580], [104, BRIAN.y - 584], [120, AMINA.y - 370], [128, AMINA.y - 364], [144, KATO.y - 620], [161, KATO.y - 630], [177, GRACE.y - 600], [212, AMINA.y - 540, E.in]],
-  ry: [[-10, 0], [40, -16], [77, -10], [93, -4], [120, -9], [144, -2], [177, -10], [212, 0, E.in]],
-  rx: [[-10, 0], [40, 4], [93, 2], [120, 4], [144, 0], [177, 2], [212, 0, E.in]],
+const lay = (v: boolean) => {
+  const PHONE = v ? { x: 540, y: 1180 } : { x: 1300, y: 545 };
+  const AMINA = v ? { x: 560, y: 720 } : { x: 1170, y: 150 };
+  const BRIAN = v ? { x: 470, y: 900 } : { x: 600, y: 650 };
+  const KATO = v ? { x: 560, y: 1330 } : { x: 640, y: 880 };
+  const GRACE = v ? { x: 520, y: 1520 } : { x: 1540, y: 860 };
+  const K: CamKeys = v
+    ? {
+        z: [[-10, 760], [40, 0], [77, 40], [93, 170], [104, 185], [120, 160], [128, 170], [144, 190], [161, 205], [177, 220], [212, 1100, E.in]],
+        x: [[-10, 0], [40, 0], [77, 0], [93, -50], [104, -40], [120, 20], [128, 26], [144, 20], [161, 28], [177, -20], [212, AMINA.x - 510, E.in]],
+        y: [[-10, PHONE.y - 960], [40, 40], [77, 40], [93, BRIAN.y - 960], [104, BRIAN.y - 964], [120, AMINA.y - 1260], [128, AMINA.y - 1256], [144, KATO.y - 960], [161, KATO.y - 970], [177, GRACE.y - 1000], [212, AMINA.y - 960, E.in]],
+        ry: [[-10, 0], [40, -10], [77, -6], [93, -2], [120, -5], [144, -1], [177, -6], [212, 0, E.in]],
+        rx: [[-10, 0], [40, 4], [93, 2], [120, 4], [144, 0], [177, 2], [212, 0, E.in]],
+      }
+    : {
+        z: [[-10, 760], [40, 0], [77, 40], [93, 170], [104, 185], [120, 160], [128, 170], [144, 190], [161, 205], [177, 220], [212, 1100, E.in]],
+        x: [[-10, PHONE.x - 960], [40, 30], [77, -10], [93, BRIAN.x - 800], [104, BRIAN.x - 780], [120, AMINA.x - 1040], [128, AMINA.x - 1030], [144, KATO.x - 800], [161, KATO.x - 780], [177, GRACE.x - 1160], [212, AMINA.x - 900, E.in]],
+        y: [[-10, -150], [40, 0], [77, 0], [93, BRIAN.y - 580], [104, BRIAN.y - 584], [120, AMINA.y - 370], [128, AMINA.y - 364], [144, KATO.y - 620], [161, KATO.y - 630], [177, GRACE.y - 600], [212, AMINA.y - 540, E.in]],
+        ry: [[-10, 0], [40, -16], [77, -10], [93, -4], [120, -9], [144, -2], [177, -10], [212, 0, E.in]],
+        rx: [[-10, 0], [40, 4], [93, 2], [120, 4], [144, 0], [177, 2], [212, 0, E.in]],
+      };
+  const PINGS = v
+    ? { x: [880, 200, 900, 180, 860], y: [640, 560, 1050, 1300, 1480] }
+    : { x: [1650, 820, 1700, 860, 1640], y: [300, 140, 620, 420, 180] };
+  return { PHONE, AMINA, BRIAN, KATO, GRACE, K, PINGS };
 };
 // Rack focus onto whichever customer just messaged.
 const FOCUS: [number, number][] = [[77, 0], [93, 140], [104, 140], [120, 60], [128, 60], [144, 190], [161, 190], [177, 250]];
@@ -103,6 +117,8 @@ const BURST_MSG = ["Price?", "Still there? 🙏", "¿Precio?", "I want 3", "Hell
 export const S02Buzz: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l02", "buzz").map((x) => x.f);
+  const V = useVertical();
+  const { PHONE, AMINA, BRIAN, KATO, GRACE, K, PINGS } = lay(V);
   const c = cam(f, K);
   const v = camVel(f, K);
   const pings = [...BUZZ_PINGS, voAt("c1", "buzz"), voAt("c2", "buzz"), voAt("c3", "buzz"), voAt("c4", "buzz")];
@@ -150,15 +166,15 @@ export const S02Buzz: React.FC = () => {
     { at: voAt("c4", "buzz"), x: GRACE.x, y: GRACE.y, z: 250, el: <Notif avatar="stock/av-w3.jpg" name="Grace" msg="Hello?? Are you there? 👀" width={500} /> },
     ...BUZZ_PINGS.map((p, i) => ({
       at: p,
-      x: [1650, 820, 1700, 860, 1640][i],
-      y: [300, 140, 620, 420, 180][i],
+      x: PINGS.x[i],
+      y: PINGS.y[i],
       z: [-260, -320, -200, -380, -150][i],
       el: <Notif name={["Leila M.", "Grace", "Akram", "Brian K.", "Amina"][i]} msg={["Quel prix ? 🙏", "Hello??", "2 pieces please", "How much?", "Available?"][i]} width={420} />,
     })),
     ...BURST_NAMES.map((n, i) => ({
       at: 176 + i * 2.5,
-      x: 300 + rand(i) * 1500,
-      y: 120 + rand(i + 9) * 860,
+      x: V ? 160 + rand(i) * 760 : 300 + rand(i) * 1500,
+      y: V ? 300 + rand(i + 9) * 1400 : 120 + rand(i + 9) * 860,
       z: -300 + rand(i + 3) * 700,
       el: <Notif name={n} msg={BURST_MSG[i]} width={400} />,
     })),
@@ -169,10 +185,10 @@ export const S02Buzz: React.FC = () => {
       <Haze />
       <MotionBlur vx={v.vx} vy={v.vy} amount={0.22}>
         <World c={c}>
-          <Layer x={60} y={230} z={-340} center={false} focus={c.z > 300 ? 600 : 0} dof={0.01} o={1 - headOut}>
+          <Layer x={V ? 80 : 60} y={V ? 250 : 230} z={V ? -200 : -340} center={false} focus={c.z > 300 ? 600 : 0} dof={0.01} o={1 - headOut}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Your phone hasn't" f={f} times={w.slice(0, 3)} size={104} weight={600} />
-              <Kinetic text="stopped *buzzing.*" f={f} times={w.slice(3, 5)} size={104} weight={600} />
+              <Kinetic text="Your phone hasn't" f={f} times={w.slice(0, 3)} size={V ? 88 : 104} weight={600} />
+              <Kinetic text="stopped *buzzing.*" f={f} times={w.slice(3, 5)} size={V ? 88 : 104} weight={600} />
               <div style={{ marginTop: 26, opacity: kf(f, [[w[5] - 2, 0], [w[6] + 6, 1, E.out]]), fontFamily: FONT, fontSize: 34, color: C.sub, fontWeight: 500 }}>
                 since 6:00 AM <span style={{ color: C.mute }}>· 49 chats · 290 unread</span>
               </div>

@@ -8,6 +8,7 @@ import { Ticks } from "../components/WA";
 import { cam, CamKeys, E, kf, rand } from "../motion";
 import { FONT } from "../theme";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 const BUBBLES = [
   "How much?", "Is it available?", "Bei gani?", "Do you deliver?", "كم السعر؟", "Size L please", "Hola! 👋", "Paid ✅",
@@ -20,6 +21,8 @@ const BUBBLES = [
 export const S09Tagline: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l11", "tagline").map((x) => x.f);
+  const V = useVertical();
+  const size = V ? 120 : 156;
   const K: CamKeys = { z: [[-10, -200], [82, 1150, E.lin]], rz: [[-10, -2], [82, 2, E.lin]] };
   const c = cam(f, K);
   const white = kf(f, [[64, 0], [74, 1, E.in]]);
@@ -36,7 +39,7 @@ export const S09Tagline: React.FC = () => {
           const dist = 1600 - (z + c.z);
           const o = Math.min(1, Math.max(0, (dist - 120) / 400)) * Math.min(1, Math.max(0, (3400 - dist) / 800));
           return (
-            <Layer key={i} x={960 + Math.cos(ang) * r * 1.5} y={540 + Math.sin(ang) * r} z={z} o={o} focus={-c.z + 200} dof={0.006}>
+            <Layer key={i} x={V ? 540 + Math.cos(ang) * r * 0.8 : 960 + Math.cos(ang) * r * 1.5} y={V ? 960 + Math.sin(ang) * r * 1.7 : 540 + Math.sin(ang) * r} z={z} o={o} focus={-c.z + 200} dof={0.006}>
               <div
                 style={{
                   display: "flex",
@@ -60,10 +63,10 @@ export const S09Tagline: React.FC = () => {
           );
         })}
       </World>
-      <AbsoluteFill style={{ background: "radial-gradient(ellipse 46% 34% at 50% 50%, rgba(251,253,254,0.97) 0%, rgba(251,253,254,0) 100%)" }} />
+      <AbsoluteFill style={{ background: V ? "radial-gradient(ellipse 60% 22% at 50% 50%, rgba(251,253,254,0.97) 0%, rgba(251,253,254,0) 100%)" : "radial-gradient(ellipse 46% 34% at 50% 50%, rgba(251,253,254,0.97) 0%, rgba(251,253,254,0) 100%)" }} />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", transform: `scale(${textIn})` }}>
-        <Kinetic text="Every customer." f={f} times={w.slice(0, 2)} size={156} align="center" dur={16} />
-        <Kinetic text="Always *answered.*" f={f} times={w.slice(2, 4)} size={156} align="center" dur={16} />
+        <Kinetic text="Every customer." f={f} times={w.slice(0, 2)} size={size} align="center" dur={16} />
+        <Kinetic text="Always *answered.*" f={f} times={w.slice(2, 4)} size={size} align="center" dur={16} />
       </AbsoluteFill>
       <Flash p={white} />
     </AbsoluteFill>

@@ -12,6 +12,7 @@ import { cam, camVel, CamKeys, E, kf, rand } from "../motion";
 import { C, FONT, SH } from "../theme";
 import { P } from "../products";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 const MoMo: React.FC<{ size?: number }> = ({ size = 34 }) => (
   <span
@@ -35,7 +36,6 @@ const MoMo: React.FC<{ size?: number }> = ({ size = 34 }) => (
 );
 
 const STEPS = ["Placed", "Confirmed", "Preparing", "Shipped", "Delivered"];
-const PHONE = { x: 430, y: 560 };
 const CHIPS = ["English · Hello", "Kiswahili · Habari", "Español · Hola", "العربية · مرحبا", "Français · Bonjour"];
 
 export const S05Chat: React.FC = () => {
@@ -47,13 +47,24 @@ export const S05Chat: React.FC = () => {
 
   // Six shots: close on the chat, pull back to the line, orbit the language ring, pan to the
   // catalog wall, whip back to the order, then travel to the tracker.
-  const K: CamKeys = {
+  const V = useVertical();
+  const PHONE = V ? { x: 540, y: 1250 } : { x: 430, y: 560 };
+  // Vertical stacks everything: copy on top, phone below, cards and the tracker float in front of it.
+  const KV: CamKeys = {
+    x: [[-10, 0], [22, 0], [48, 0], [a[4] - 2, 0], [a[7] + 6, -30], [a[8] - 2, -30], [a[11] + 4, 0], [158, 0], [178, 0, E.snap], [b[4] - 8, 0], [b[4] + 14, 0], [b[9] - 4, 0], [b[11], 0], [324, 0], [334, 1700, E.in]],
+    y: [[-10, PHONE.y - 920], [22, PHONE.y - 910], [48, 60], [a[8] - 2, 160], [a[11] + 4, 120], [158, 120], [178, PHONE.y - 920, E.snap], [b[4] - 8, PHONE.y - 930], [b[4] + 14, 60], [b[11], 80], [346, 80]],
+    z: [[-10, 540], [22, 500], [48, -40], [a[7] + 6, 100], [a[11] + 4, 60], [158, 70], [178, 420, E.snap], [b[4] - 8, 400], [b[4] + 14, 60], [b[11], 80], [322, 100], [346, 140]],
+    ry: [[-10, 4], [48, 2], [a[7] + 6, 12], [a[8] - 2, 12], [a[11] + 4, 5], [158, 6], [178, 0, E.snap], [b[4] + 14, -6], [b[11], 4], [346, 10]],
+    rx: [[-10, 2], [a[7] + 6, 6], [a[11] + 4, 2], [346, 0]],
+  };
+  const KL: CamKeys = {
     x: [[-10, -530], [22, -520], [48, -40], [a[4] - 2, -40], [a[7] + 6, -150], [a[8] - 2, -150], [a[11] + 4, 330], [158, 340], [178, -440, E.snap], [b[4] - 8, -440], [b[4] + 14, -130], [b[9] - 4, -110], [b[11], 380], [324, 400], [334, 1700, E.in]],
     y: [[-10, 60], [22, 70], [48, 0], [a[8] - 2, 0], [a[11] + 4, 100], [158, 110], [178, 230, E.snap], [b[4] - 8, 220], [b[4] + 14, 70], [b[11], 30], [346, 30]],
     z: [[-10, 540], [22, 500], [48, 80], [a[7] + 6, 150], [a[11] + 4, 60], [158, 70], [178, 420, E.snap], [b[4] - 8, 400], [b[4] + 14, 130], [b[11], 70], [322, 100], [346, 140]],
     ry: [[-10, 6], [48, 4], [a[7] + 6, 14], [a[8] - 2, 14], [a[11] + 4, 7], [158, 8], [178, 0, E.snap], [b[4] + 14, -9], [b[11], 6], [346, 14]],
     rx: [[-10, 2], [a[7] + 6, 6], [a[11] + 4, 2], [346, 0]],
   };
+  const K = V ? KV : KL;
   const c = cam(f, K);
   const v = camVel(f, K);
 
@@ -161,8 +172,8 @@ export const S05Chat: React.FC = () => {
             return (
               <Layer
                 key={t}
-                x={PHONE.x + Math.sin(th) * 280}
-                y={PHONE.y - 140 + i * 105}
+                x={PHONE.x + Math.sin(th) * (V ? 300 : 280)}
+                y={V ? PHONE.y - 300 + i * 130 : PHONE.y - 140 + i * 105}
                 z={Math.cos(th) * 420 - 40}
                 ry={-c.ry}
                 s={0.6 + 0.4 * s}
@@ -177,7 +188,7 @@ export const S05Chat: React.FC = () => {
             );
           })}
 
-          <Layer x={PHONE.x} y={PHONE.y} z={0} ry={-6}>
+          <Layer x={PHONE.x} y={PHONE.y} z={0} ry={V ? -3 : -6} focus={V && order > 0.05 ? 180 : 0} dof={0.012}>
             <IPhone time="23:47">
               <WAWallpaper />
               <WAHeader name="Amina" avatar="stock/av-w1.jpg" status={f >= 20 && f < 40 ? "GetOrda AI is typing…" : "online"} badge={49} />
@@ -187,15 +198,15 @@ export const S05Chat: React.FC = () => {
           </Layer>
 
           {/* Phase A copy and the catalog wall */}
-          <Layer x={840} y={215} z={0} center={false} o={phaseA}>
+          <Layer x={V ? 90 : 840} y={215} z={0} center={false} o={phaseA}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Answers every *customer,*" f={f} times={a.slice(1, 4)} size={76} />
-              <Kinetic text="in their own *language.*" f={f} times={a.slice(4, 8)} size={76} />
+              <Kinetic text="Answers every *customer,*" f={f} times={a.slice(1, 4)} size={V ? 70 : 76} />
+              <Kinetic text="in their own *language.*" f={f} times={a.slice(4, 8)} size={V ? 70 : 76} />
             </div>
           </Layer>
-          <Layer x={1010} y={480} z={20} center={false} o={phaseA}>
+          <Layer x={V ? 90 : 1010} y={V ? 420 : 480} z={20} center={false} o={phaseA}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="from your real *products* and *prices.*" f={f} times={a.slice(8, 14)} size={56} weight={550} color={C.ink2} />
+              <Kinetic text="from your real *products* and *prices.*" f={f} times={a.slice(8, 14)} size={V ? 50 : 56} weight={550} color={C.ink2} />
             </div>
           </Layer>
           {[P.madrid, P.supreme, P.asics, P.cerave].map((p, i) => {
@@ -204,9 +215,10 @@ export const S05Chat: React.FC = () => {
             return (
               <Layer
                 key={p.name}
-                x={1130 + i * 270}
-                y={800 + (1 - s) * 220}
-                z={-520 * (1 - s) + hl * 90}
+                x={V ? 210 + i * 220 : 1130 + i * 270}
+                y={(V ? 1120 : 800) + (1 - s) * 220}
+                z={-520 * (1 - s) + hl * 90 + (V ? 140 : 0)}
+                s={V ? 0.78 : 1}
                 rx={(1 - s) * 55}
                 o={Math.min(1, s * 1.5) * phaseA}
               >
@@ -225,24 +237,24 @@ export const S05Chat: React.FC = () => {
           })}
 
           {/* Phase B copy */}
-          <Layer x={680} y={600} z={60} center={false}>
+          <Layer x={V ? 540 : 680} y={V ? 740 : 600} z={60} center={V}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Takes the *order.*" f={f} times={b.slice(1, 4)} size={58} out={b[4] - 16} dur={12} />
+              <Kinetic text="Takes the *order.*" f={f} times={b.slice(1, 4)} size={V ? 64 : 58} out={b[4] - 16} dur={12} align={V ? "center" : undefined} />
             </div>
           </Layer>
-          <Layer x={680} y={250} z={40} center={false}>
+          <Layer x={V ? 90 : 680} y={V ? 300 : 250} z={40} center={false}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Shares your *mobile money* details." f={f} times={b.slice(4, 9)} size={56} out={b[10] - 14} lead={-2} dur={12} />
+              <Kinetic text="Shares your *mobile money* details." f={f} times={b.slice(4, 9)} size={V ? 52 : 56} out={b[10] - 14} lead={-2} dur={12} />
             </div>
           </Layer>
-          <Layer x={850} y={150} z={20} center={false}>
+          <Layer x={V ? 90 : 850} y={V ? 300 : 150} z={20} center={false}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Tracks it to their *door.*" f={f} times={[b[10], b[11], b[15], b[16], b[17]]} size={84} lead={-2} dur={12} />
+              <Kinetic text="Tracks it to their *door.*" f={f} times={[b[10], b[11], b[15], b[16], b[17]]} size={V ? 72 : 84} lead={-2} dur={12} />
             </div>
           </Layer>
 
           {/* MoMo payment card flips in next to the phone */}
-          <Layer x={1060} y={500} z={120 + momoOut * 320} ry={(1 - momo) * 180} o={(momo > 0 ? 1 : 0) * (1 - momoOut)} s={0.9 + 0.1 * momo}>
+          <Layer x={V ? 540 : 1060} y={V ? 640 : 500} z={120 + momoOut * 320} ry={(1 - momo) * 180} o={(momo > 0 ? 1 : 0) * (1 - momoOut)} s={0.9 + 0.1 * momo}>
             <div
               style={{
                 width: 580,
@@ -270,7 +282,7 @@ export const S05Chat: React.FC = () => {
           </Layer>
 
           {/* Orders card with the delivery bike riding the tracker */}
-          <Layer x={1370} y={600} z={0} s={0.94 + 0.06 * order} o={Math.min(1, order * 1.4)} ry={-4}>
+          <Layer x={V ? 540 : 1370} y={V ? 1060 : 600} z={V ? 180 : 0} s={(0.94 + 0.06 * order) * (V ? 0.78 : 1)} o={Math.min(1, order * 1.4)} ry={V ? 0 : -4}>
             <div style={{ width: 1000, borderRadius: 28, background: "#fff", border: `1px solid ${C.line}`, boxShadow: SH.card, padding: "28px 32px", fontFamily: FONT, position: "relative" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
                 <Avatar src="stock/av-w1.jpg" size={60} />

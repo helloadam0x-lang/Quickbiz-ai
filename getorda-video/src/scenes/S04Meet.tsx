@@ -9,14 +9,18 @@ import { WAIcon } from "../components/WA";
 import { cam, CamKeys, E, kf, rand } from "../motion";
 import { C, FONT } from "../theme";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 export const S04Meet: React.FC = () => {
   const f = useSceneFrame();
   const w4 = voWords("l04", "meet").map((x) => x.f);
   const w5 = voWords("l05", "meet").map((x) => x.f);
+  const V = useVertical();
+  // Vertical: the logo row is scaled to fit and the line below wraps onto two lines.
+  const ROW = V ? { x: 540, y: 860, s: 0.68, up: 0.12 } : { x: 960, y: 470, s: 1, up: 0.2 };
   const K: CamKeys = {
     z: [[0, 0], [50, 90], [138, 190, E.inOut]],
-    x: [[0, -50], [138, 50, E.inOut]],
+    x: V ? [[0, -30], [138, 30, E.inOut]] : [[0, -50], [138, 50, E.inOut]],
     ry: [[0, -9], [138, 7, E.inOut]],
     rx: [[0, 5], [138, -2, E.inOut]],
   };
@@ -36,7 +40,7 @@ export const S04Meet: React.FC = () => {
       <Haze />
       <AbsoluteFill style={{ transform: `translate(${shake}px, ${shake * 0.5}px)` }}>
         <World c={c}>
-          <Layer x={960} y={470} z={-420} o={0.9}>
+          <Layer x={ROW.x} y={ROW.y} z={-420} o={0.9}>
             <div style={{ width: 900, height: 900, borderRadius: "50%", background: "radial-gradient(circle, rgba(109,212,241,0.45) 0%, rgba(109,212,241,0) 65%)" }} />
           </Layer>
           {/* Soft cyan bokeh drifting in depth gives the hold parallax. */}
@@ -45,8 +49,8 @@ export const S04Meet: React.FC = () => {
             return (
               <Layer
                 key={i}
-                x={960 + (rand(i + 20) - 0.5) * 2700}
-                y={540 + (rand(i + 40) - 0.5) * 1500 + Math.sin((f + i * 17) / 30) * 24}
+                x={V ? 540 + (rand(i + 20) - 0.5) * 1700 : 960 + (rand(i + 20) - 0.5) * 2700}
+                y={(V ? 960 + (rand(i + 40) - 0.5) * 2600 : 540 + (rand(i + 40) - 0.5) * 1500) + Math.sin((f + i * 17) / 30) * 24}
                 z={-1500 + rand(i) * 1600}
                 o={0.55 * kf(f, [[4, 0], [36, 1, E.out]])}
                 focus={0}
@@ -56,7 +60,7 @@ export const S04Meet: React.FC = () => {
               </Layer>
             );
           })}
-          <Layer x={960} y={470 - up * 110} z={0} s={1 - up * 0.2}>
+          <Layer x={ROW.x} y={ROW.y - up * 110 * ROW.s} z={0} s={(1 - up * ROW.up) * ROW.s}>
             <div style={{ display: "flex", alignItems: "center", fontFamily: FONT, fontWeight: 700, fontSize: 156, letterSpacing: "-0.05em", color: C.ink, whiteSpace: "nowrap", transformStyle: "preserve-3d" }}>
               <div style={{ width: 440 * meet, overflow: "hidden", display: "flex", justifyContent: "flex-end" }}>
                 <span style={{ paddingRight: 36, opacity: meet, filter: `blur(${(1 - meet) * 14}px)`, transform: `translateX(${(1 - meet) * 100}px)`, fontWeight: 600 }}>Meet</span>
@@ -74,12 +78,19 @@ export const S04Meet: React.FC = () => {
               </div>
             </div>
           </Layer>
-          <Layer x={960} y={655} z={50}>
+          <Layer x={ROW.x} y={V ? 1070 : 655} z={50}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Your AI employee, right inside *WhatsApp.*" f={f} times={w5} size={68} weight={550} align="center" color={C.ink2} />
+              {V ? (
+                <>
+                  <Kinetic text="Your AI employee," f={f} times={w5.slice(0, 3)} size={74} weight={550} align="center" color={C.ink2} />
+                  <Kinetic text="right inside *WhatsApp.*" f={f} times={w5.slice(3)} size={74} weight={550} align="center" color={C.ink2} />
+                </>
+              ) : (
+                <Kinetic text="Your AI employee, right inside *WhatsApp.*" f={f} times={w5} size={68} weight={550} align="center" color={C.ink2} />
+              )}
             </div>
           </Layer>
-          <Layer x={960} y={770} z={90} s={live} o={Math.min(1, live)}>
+          <Layer x={ROW.x} y={V ? 1250 : 770} z={90} s={live} o={Math.min(1, live)}>
             <div
               style={{
                 display: "flex",
@@ -108,7 +119,7 @@ export const S04Meet: React.FC = () => {
             style={{
               width: 180 + ring * 1500,
               height: 180 + ring * 1500,
-              marginTop: -140,
+              marginTop: V ? -200 : -140,
               borderRadius: "50%",
               border: `3px solid rgba(109,212,241,${0.8 * (1 - ring)})`,
               boxShadow: `0 0 160px rgba(109,212,241,${0.45 * (1 - ring)}), inset 0 0 80px rgba(109,212,241,${0.3 * (1 - ring)})`,

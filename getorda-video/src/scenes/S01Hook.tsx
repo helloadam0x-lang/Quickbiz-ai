@@ -7,19 +7,24 @@ import { Kinetic } from "../components/Kinetic";
 import { cam, camVel, CamKeys, E, kf } from "../motion";
 import { C } from "../theme";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 // "Let me guess…" — the ellipsis turns into a WhatsApp typing bubble and the camera dives into it.
-const K: CamKeys = {
+// Vertical: the row is scaled to fit the narrow frame, so the bubble sits closer to center.
+const VS = 0.78;
+const keys = (v: boolean): CamKeys => ({
   z: [[-10, -380], [30, 0], [38, 20, E.inOut], [60, 1350, E.in]],
-  x: [[30, 0], [60, 330, E.in]],
+  x: [[30, 0], [60, v ? 330 * VS : 330, E.in]],
   y: [[30, 0], [60, 8, E.in]],
   ry: [[-10, -10], [34, 0]],
   rx: [[-10, 6], [34, 0]],
-};
+});
 
 export const S01Hook: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l01", "hook").map((x) => x.f);
+  const V = useVertical();
+  const K = keys(V);
   const c = cam(f, K);
   const v = camVel(f, K);
   const bubble = kf(f, [[34, 0], [44, 1, E.out]]);
@@ -32,7 +37,7 @@ export const S01Hook: React.FC = () => {
       <Haze />
       <MotionBlur vx={v.vx} vy={v.vy + v.vz * 0.05} amount={0.25}>
         <World c={c}>
-          <Layer x={960} y={540} z={0}>
+          <Layer x={V ? 540 : 960} y={V ? 960 : 540} z={0} s={V ? VS : 1}>
             <div style={{ display: "flex", alignItems: "baseline", whiteSpace: "nowrap" }}>
               <div style={{ opacity: 1 - textOut, filter: textOut > 0 ? `blur(${textOut * 16}px)` : undefined }}>
                 <Kinetic text="Let me *guess*" f={f} times={w} size={156} weight={600} dur={16} lead={4} />

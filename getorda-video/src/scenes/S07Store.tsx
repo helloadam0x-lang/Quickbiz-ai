@@ -12,9 +12,9 @@ import { cam, camVel, CamKeys, E, kf } from "../motion";
 import { C, FONT, SH } from "../theme";
 import { P } from "../products";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 const URL = "dripavenue.getorda.app";
-const PHONE = { x: 1360, y: 560 };
 
 // The storefront assembles itself section by section, like it's being generated.
 const Storefront: React.FC<{ f: number }> = ({ f }) => {
@@ -69,12 +69,22 @@ export const S07Store: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l09", "store").map((x) => x.f);
   // l09: Your own store, live in a minute.
-  const K: CamKeys = {
+  const V = useVertical();
+  const PHONE = V ? { x: 540, y: 1250 } : { x: 1360, y: 560 };
+  const KV: CamKeys = {
+    ry: [[-10, -6], [82, 5, E.inOut]],
+    z: [[-10, 240], [82, 40, E.inOut]],
+    x: [[-10, -70], [82, -25, E.inOut]],
+    y: [[-10, 60], [82, 120, E.inOut]],
+    rx: [[-10, 4], [82, 0, E.inOut]],
+  };
+  const KL: CamKeys = {
     ry: [[-10, -12], [82, 6, E.inOut]],
     z: [[-10, 240], [82, 40, E.inOut]],
     x: [[-10, 40], [82, -30, E.inOut]],
     rx: [[-10, 5], [82, 0, E.inOut]],
   };
+  const K = V ? KV : KL;
   const c = cam(f, K);
   const v = camVel(f, K);
   const url = typed(URL, f, -4, 1.1);
@@ -86,13 +96,13 @@ export const S07Store: React.FC = () => {
       <Haze />
       <MotionBlur vx={v.vx} vy={v.vy} amount={0.25}>
         <World c={c}>
-          <Layer x={1690} y={260 + float(1)} z={-260} rz={10} focus={0} dof={0.01}>
+          <Layer x={V ? 900 : 1690} y={(V ? 820 : 260) + float(1)} z={-260} rz={10} focus={0} dof={0.01}>
             <Photo src="products/nivea-rollon-cut.png" fit="contain" style={{ width: 170, height: 250, filter: "drop-shadow(0 20px 30px rgba(11,60,90,0.25))" }} />
           </Layer>
-          <Layer x={980} y={880 + float(2)} z={260} rz={-12} focus={0} dof={0.008}>
+          <Layer x={V ? 220 : 980} y={(V ? 1620 : 880) + float(2)} z={260} rz={-12} focus={0} dof={0.008}>
             <Photo src="products/jersey-supreme-cut.png" fit="contain" style={{ width: 300, height: 300, filter: "drop-shadow(0 24px 36px rgba(11,60,90,0.28))" }} />
           </Layer>
-          <Layer x={200} y={250} z={140} center={false}>
+          <Layer x={V ? 110 : 200} y={V ? 270 : 250} z={140} center={false}>
             <div
               style={{
                 display: "inline-flex",
@@ -122,10 +132,10 @@ export const S07Store: React.FC = () => {
               </span>
             </div>
           </Layer>
-          <Layer x={200} y={430} z={40} center={false}>
+          <Layer x={V ? 110 : 200} y={V ? 450 : 430} z={40} center={false}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Your own *store,*" f={f} times={w.slice(0, 3)} size={112} />
-              <Kinetic text="live in a *minute.*" f={f} times={w.slice(3, 7)} size={112} />
+              <Kinetic text="Your own *store,*" f={f} times={w.slice(0, 3)} size={V ? 96 : 112} />
+              <Kinetic text="live in a *minute.*" f={f} times={w.slice(3, 7)} size={V ? 96 : 112} />
             </div>
           </Layer>
           <Layer x={PHONE.x} y={PHONE.y} z={0} ry={-10}>

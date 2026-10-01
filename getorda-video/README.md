@@ -15,11 +15,12 @@ VO_VARIANT=sarah-v2 python3 scripts/build_vo_el.py
 # 3. Score (Salamander grand piano samples are fetched into .cache/) + SFX + VO mix
 python3 scripts/make_audio.py        # -> public/audio/getorda-v2-mix.wav (-14 LUFS)
 npx remotion render GetOrda out/GetOrda-Promo-v3-4K.mp4 --scale=2 --crf=14 --x264-preset=slow --audio-bitrate=320k
+npx remotion render GetOrdaVertical out/GetOrda-Promo-v3-9x16-4K.mp4 --scale=2 --crf=14 --x264-preset=slow --audio-bitrate=320k   # 9:16, 2160x3840
 ```
 
 `build_vo_el.py` prints the scene keys that depend on word timing (the stamp on "lost", the chat camera keys, the tap) so a re-take can be checked before rendering. The older Kokoro path (`gen_vo.py`, `align_vo.py`) still works offline.
 
-The composition is authored at 1920x1080; `--scale=2` renders a native 4K master. Preview with `npm run dev`.
+`GetOrda` is authored at 1920x1080 and `GetOrdaVertical` at 1080x1920; the scenes share code and branch on `useVertical()` (`src/format.ts`) for the portrait layouts and camera moves. `--scale=2` renders a native 4K master. Preview with `npm run dev`.
 
 ## Assets kept out of git
 

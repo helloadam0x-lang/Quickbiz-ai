@@ -11,24 +11,35 @@ import { Avatar, Ticks } from "../components/WA";
 import { cam, camVel, CamKeys, E, kf, rand } from "../motion";
 import { C, FONT, SH } from "../theme";
 import { voWords } from "../timeline";
+import { useVertical } from "../format";
 
 const PHOTOS = ["stock/av-w1.jpg", "stock/av-m1.jpg", "stock/av-w2.jpg", "stock/av-m2.jpg", "stock/av-w3.jpg", "stock/av-m3.jpg"];
 const INITIALS = "AKMNJSRPLTEHWOFCYQUVIZBDGXAKMNJSRPLTEHWOF";
-const CARD = { x: 960, y: 590, w: 1480, h: 660 };
-const BTN = { x: CARD.x - CARD.w / 2 + 48 + 340, y: 742 };
 
 export const S08Broadcast: React.FC = () => {
   const f = useSceneFrame();
   const w = voWords("l10", "broadcast").map((x) => x.f);
   // l10: Your best customers, back in one tap.
   const tap = w[6];
-  const K: CamKeys = {
+  const V = useVertical();
+  // Vertical: the composer stacks above the customer preview.
+  const CARD = V ? { x: 540, y: 1090, w: 980, h: 1260 } : { x: 960, y: 590, w: 1480, h: 660 };
+  const BTN = V ? { x: 540, y: 1025 } : { x: CARD.x - CARD.w / 2 + 48 + 340, y: 742 };
+  const KV: CamKeys = {
+    x: [[-10, 0], [36, 0]],
+    y: [[-10, -120], [8, -110], [36, 60], [tap + 30, 80]],
+    z: [[-10, 260], [8, 250], [36, 20], [tap - 4, 60, E.inOut], [tap + 30, -260, E.out], [100, -300]],
+    ry: [[-10, 0], [36, 0], [tap + 30, -4], [100, -6]],
+    rx: [[-10, 4], [36, 0], [tap + 30, 5]],
+  };
+  const KL: CamKeys = {
     x: [[-10, -330], [8, -330], [36, 0], [tap, 0], [tap + 30, 0]],
     y: [[-10, -60], [8, -50], [36, 0], [tap + 30, 20]],
     z: [[-10, 400], [8, 380], [36, 20], [tap - 4, 60, E.inOut], [tap + 30, -260, E.out], [100, -300]],
     ry: [[-10, 8], [36, 0], [tap + 30, -6], [100, -8]],
     rx: [[-10, 4], [36, 0], [tap + 30, 6]],
   };
+  const K = V ? KV : KL;
   const c = cam(f, K);
   const v = camVel(f, K);
   const sent = f >= tap + 2;
@@ -39,14 +50,21 @@ export const S08Broadcast: React.FC = () => {
       <Haze />
       <MotionBlur vx={v.vx} vy={v.vy} amount={0.25}>
         <World c={c}>
-          <Layer x={960} y={150} z={90}>
+          <Layer x={V ? 540 : 960} y={V ? 270 : 150} z={90}>
             <div style={{ whiteSpace: "nowrap" }}>
-              <Kinetic text="Your best customers, back in *one tap.*" f={f} times={w} size={76} align="center" />
+              {V ? (
+                <>
+                  <Kinetic text="Your best customers," f={f} times={w.slice(0, 3)} size={76} align="center" />
+                  <Kinetic text="back in *one tap.*" f={f} times={w.slice(3)} size={76} align="center" />
+                </>
+              ) : (
+                <Kinetic text="Your best customers, back in *one tap.*" f={f} times={w} size={76} align="center" />
+              )}
             </div>
           </Layer>
           <Layer x={CARD.x} y={CARD.y} z={0}>
-            <div style={{ width: CARD.w, height: CARD.h, borderRadius: 30, background: "#fff", border: `1px solid ${C.line}`, boxShadow: SH.card, padding: "40px 48px", display: "flex", gap: 48, fontFamily: FONT }}>
-              <div style={{ flex: 1.15 }}>
+            <div style={{ width: CARD.w, height: CARD.h, borderRadius: 30, background: "#fff", border: `1px solid ${C.line}`, boxShadow: SH.card, padding: "40px 48px", display: "flex", flexDirection: V ? "column" : "row", gap: V ? 30 : 48, fontFamily: FONT }}>
+              <div style={{ flex: V ? "none" : 1.15 }}>
                 <PageTitle pre="Message all your " accent="customers" size={46} eyebrow="Broadcasts" />
                 <div style={{ fontSize: 16, color: C.sub, marginTop: 8 }}>
                   <b style={{ color: C.ink }}>2</b> broadcasts sent, <b style={{ color: C.ink }}>18</b> messages delivered. <b style={{ color: C.ink }}>43</b> customers can receive the next one.
@@ -133,10 +151,11 @@ export const S08Broadcast: React.FC = () => {
             const s = pop(f, at, { damping: 13, stiffness: 120 });
             const ang = rand(i) * Math.PI * 2;
             const rr = 0.75 + rand(i + 50) * 0.5;
-            const tx = 960 + Math.cos(ang) * 1100 * rr;
+            const tx = V ? 540 + Math.cos(ang) * 620 * rr : 960 + Math.cos(ang) * 1100 * rr;
             // Keep the burst out of the headline band so no avatar lands on "one tap".
-            const ty0 = 560 + Math.sin(ang) * 620 * rr;
-            const ty = ty0 < 300 ? 620 + (300 - ty0) * 0.9 : ty0;
+            const ty0 = V ? 1050 + Math.sin(ang) * 1000 * rr : 560 + Math.sin(ang) * 620 * rr;
+            const band = V ? 440 : 300;
+            const ty = ty0 < band ? (V ? 1500 : 620) + (band - ty0) * (V ? 0.5 : 0.9) : ty0;
             const tz = -500 + rand(i + 99) * 900;
             const k = Math.min(1, s);
             const photo = i < PHOTOS.length * 3 && i % 2 === 0;
@@ -153,14 +172,14 @@ export const S08Broadcast: React.FC = () => {
           })}
 
           <Layer x={0} y={0} z={30} center={false}>
-            <div style={{ position: "relative", width: 1920, height: 1080 }}>
+            <div style={{ position: "relative", width: V ? 1080 : 1920, height: V ? 1920 : 1080 }}>
               <Cursor
                 f={f}
                 keys={[
-                  { f: 10, x: 1200, y: 1060 },
+                  { f: 10, x: V ? 820 : 1200, y: V ? 1880 : 1060 },
                   { f: tap - 8, x: BTN.x + 30, y: BTN.y + 6 },
                   { f: tap + 14, x: BTN.x + 40, y: BTN.y + 12 },
-                  { f: 96, x: 1000, y: 1040 },
+                  { f: 96, x: V ? 660 : 1000, y: V ? 1860 : 1040 },
                 ]}
                 clicks={[tap]}
                 show={[12, 84]}

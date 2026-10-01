@@ -1,13 +1,13 @@
 import React from "react";
-import { AbsoluteFill } from "remotion";
+import { AbsoluteFill, useVideoConfig } from "remotion";
 import { CamState } from "../motion";
 
-export const W = 1920;
-export const H = 1080;
 const PERSP = 1600;
 
 // A 3D world viewed by a moving camera. Children are <Layer>s placed in world space.
-export const World: React.FC<{ c: CamState; children: React.ReactNode; persp?: number }> = ({ c, children, persp = PERSP }) => (
+export const World: React.FC<{ c: CamState; children: React.ReactNode; persp?: number }> = ({ c, children, persp = PERSP }) => {
+  const { width: W, height: H } = useVideoConfig();
+  return (
   <AbsoluteFill style={{ perspective: persp, perspectiveOrigin: "50% 50%", overflow: "hidden" }}>
     <div
       style={{
@@ -24,7 +24,8 @@ export const World: React.FC<{ c: CamState; children: React.ReactNode; persp?: n
       {children}
     </div>
   </AbsoluteFill>
-);
+  );
+};
 
 // A flat element at a world position. Depth-of-field blur grows with distance from the focus plane.
 export const Layer: React.FC<{
@@ -84,6 +85,7 @@ export const MotionBlur: React.FC<{ vx: number; vy: number; amount?: number; chi
 
 // Soft anamorphic flare / light leak in brand cyan with a warm edge, drawn with gradients.
 export const Flare: React.FC<{ p: number; x?: number; y?: number; hue?: "cyan" | "warm" }> = ({ p, x = 50, y = 50, hue = "cyan" }) => {
+  const { height } = useVideoConfig();
   if (p <= 0.001) return null;
   const c = hue === "cyan" ? "109,212,241" : "255,214,170";
   return (
@@ -92,7 +94,7 @@ export const Flare: React.FC<{ p: number; x?: number; y?: number; hue?: "cyan" |
       <AbsoluteFill
         style={{
           background: `linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(${c},0.0) 20%, rgba(${c},0.55) 50%, rgba(${c},0) 80%, rgba(255,255,255,0) 100%)`,
-          transform: `translateY(${(y - 50) * 10.8}px) scaleY(0.06)`,
+          transform: `translateY(${((y - 50) * height) / 100}px) scaleY(0.06)`,
         }}
       />
     </AbsoluteFill>

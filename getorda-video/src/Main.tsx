@@ -4,6 +4,7 @@ import { Audio } from "@remotion/media";
 import { tween } from "./anim";
 import { E, kf } from "./motion";
 import { SCENES, SceneKey, T } from "./timeline";
+import { useVertical } from "./format";
 import { S01Hook } from "./scenes/S01Hook";
 import { S02Buzz } from "./scenes/S02Buzz";
 import { S03Lost } from "./scenes/S03Lost";
@@ -53,9 +54,13 @@ const LIST: { key: SceneKey; C: React.FC; e: Enter }[] = [
   { key: "outro", C: S10Outro, e: { kind: "none" } },
 ];
 
-export const Main: React.FC = () => (
+export const Main: React.FC = () => {
+  const v = useVertical();
+  return (
   <AbsoluteFill style={{ backgroundColor: "#FBFDFE" }}>
-    {LIST.map(({ key, C, e }) => {
+    {LIST.map(({ key, C, e: e0 }) => {
+      // The chat irises open from the WhatsApp Live pill, which sits lower in the vertical cut.
+      const e: Enter = v && e0.kind === "iris" ? { kind: "iris", x: 540, y: 1250 } : e0;
       const { start, len } = SCENES[key];
       return (
         <Sequence key={key} from={start - T} durationInFrames={len + 2 * T} name={key}>
@@ -67,4 +72,5 @@ export const Main: React.FC = () => (
     })}
     <Audio src={staticFile("audio/getorda-v2-mix.wav")} />
   </AbsoluteFill>
-);
+  );
+};
