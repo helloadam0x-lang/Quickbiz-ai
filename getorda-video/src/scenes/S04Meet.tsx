@@ -1,10 +1,12 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
-import { pop, tween, useSceneFrame, EASE_IN, EASE_IN_OUT } from "../anim";
+import { pop, useSceneFrame } from "../anim";
+import { Flare, Flash, Layer, World } from "../components/Cam";
 import { Haze } from "../components/Haze";
 import { Kinetic } from "../components/Kinetic";
 import { OrdaMark } from "../components/OrdaMark";
 import { WAIcon } from "../components/WA";
+import { cam, CamKeys, E, kf, rand } from "../motion";
 import { C, FONT } from "../theme";
 import { voWords } from "../timeline";
 
@@ -12,92 +14,110 @@ export const S04Meet: React.FC = () => {
   const f = useSceneFrame();
   const w4 = voWords("l04", "meet").map((x) => x.f);
   const w5 = voWords("l05", "meet").map((x) => x.f);
-  const flash = 1 - tween(f, -2, 16);
-  const mark = pop(f, 0, { damping: 11, stiffness: 150 });
-  const meet = tween(f, w4[0] - 3, w4[0] + 12, 0, 1, EASE_IN_OUT);
-  const name = tween(f, w4[1] - 3, w4[1] + 14, 0, 1, EASE_IN_OUT);
-  const up = tween(f, w5[0] - 12, w5[0] + 8, 0, 1, EASE_IN_OUT);
-  const ring = tween(f, 0, 40);
+  const K: CamKeys = {
+    z: [[0, 0], [50, 90], [138, 190, E.inOut]],
+    x: [[0, -50], [138, 50, E.inOut]],
+    ry: [[0, -9], [138, 7, E.inOut]],
+    rx: [[0, 5], [138, -2, E.inOut]],
+  };
+  const c = cam(f, K);
+  const shake = f >= 0 && f < 12 ? Math.sin(f * 2.9) * (12 - f) * 1.6 : 0;
+  // The mark drops out of the camera and flips flat onto the stage.
+  const land = kf(f, [[-4, 0], [7, 1, E.out]]);
+  const settle = pop(f, 6, { damping: 9, stiffness: 220 });
+  const ring = kf(f, [[5, 0], [46, 1, E.out]]);
+  const meet = kf(f, [[w4[0] - 3, 0], [w4[0] + 12, 1, E.inOut]]);
+  const name = kf(f, [[w4[1] - 3, 0], [w4[1] + 14, 1, E.inOut]]);
+  const up = kf(f, [[w5[0] - 12, 0], [w5[0] + 8, 1, E.inOut]]);
   const live = pop(f, w5[5] + 4, { damping: 13, stiffness: 170 });
-  const exit = tween(f, 126, 148, 0, 1, EASE_IN);
 
   return (
     <AbsoluteFill>
       <Haze />
-      <AbsoluteFill
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          transform: `scale(${1 + tween(f, 0, 140, 0, 0.04) + exit * 0.3})`,
-          filter: exit > 0 ? `blur(${exit * 20}px)` : undefined,
-          opacity: 1 - exit * 0.5,
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            width: 200 + ring * 1100,
-            height: 200 + ring * 1100,
-            borderRadius: "50%",
-            border: `2px solid rgba(109,212,241,${0.7 * (1 - ring)})`,
-            boxShadow: `0 0 120px rgba(109,212,241,${0.35 * (1 - ring)})`,
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            fontFamily: FONT,
-            fontWeight: 700,
-            fontSize: 150,
-            letterSpacing: "-0.05em",
-            color: C.ink,
-            transform: `translateY(${-up * 120}px) scale(${1 - up * 0.22})`,
-          }}
-        >
-          <div style={{ width: 430 * meet, overflow: "hidden", display: "flex", justifyContent: "flex-end" }}>
-            <span style={{ paddingRight: 34, opacity: meet, filter: `blur(${(1 - meet) * 14}px)`, transform: `translateX(${(1 - meet) * 100}px)`, fontWeight: 600 }}>
-              Meet
-            </span>
-          </div>
-          <div style={{ transform: `scale(${mark}) rotate(${(1 - mark) * -30}deg)`, filter: `drop-shadow(0 26px 40px rgba(11,110,146,${0.22 * Math.min(1, mark)}))` }}>
-            <OrdaMark size={168} id="meet" color="#12120F" />
-          </div>
-          <div style={{ width: 620 * name, overflow: "hidden" }}>
-            <span style={{ display: "inline-block", paddingLeft: 34, opacity: name, filter: `blur(${(1 - name) * 14}px)`, transform: `translateX(${(1 - name) * -120}px)` }}>
-              GetOrda
-            </span>
-          </div>
-        </div>
-
-        <div style={{ position: "absolute", top: 600, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Kinetic text="Your AI employee, right inside *WhatsApp.*" f={f} times={w5} size={66} weight={550} align="center" color={C.ink2} />
+      <AbsoluteFill style={{ transform: `translate(${shake}px, ${shake * 0.5}px)` }}>
+        <World c={c}>
+          <Layer x={960} y={470} z={-420} o={0.9}>
+            <div style={{ width: 900, height: 900, borderRadius: "50%", background: "radial-gradient(circle, rgba(109,212,241,0.45) 0%, rgba(109,212,241,0) 65%)" }} />
+          </Layer>
+          {/* Soft cyan bokeh drifting in depth gives the hold parallax. */}
+          {Array.from({ length: 14 }).map((_, i) => {
+            const r = 30 + rand(i + 60) * 90;
+            return (
+              <Layer
+                key={i}
+                x={960 + (rand(i + 20) - 0.5) * 2700}
+                y={540 + (rand(i + 40) - 0.5) * 1500 + Math.sin((f + i * 17) / 30) * 24}
+                z={-1500 + rand(i) * 1600}
+                o={0.55 * kf(f, [[4, 0], [36, 1, E.out]])}
+                focus={0}
+                dof={0.016}
+              >
+                <div style={{ width: r * 2, height: r * 2, borderRadius: "50%", background: "radial-gradient(circle, rgba(109,212,241,0.6) 0%, rgba(109,212,241,0) 70%)" }} />
+              </Layer>
+            );
+          })}
+          <Layer x={960} y={470 - up * 110} z={0} s={1 - up * 0.2}>
+            <div style={{ display: "flex", alignItems: "center", fontFamily: FONT, fontWeight: 700, fontSize: 156, letterSpacing: "-0.05em", color: C.ink, whiteSpace: "nowrap", transformStyle: "preserve-3d" }}>
+              <div style={{ width: 440 * meet, overflow: "hidden", display: "flex", justifyContent: "flex-end" }}>
+                <span style={{ paddingRight: 36, opacity: meet, filter: `blur(${(1 - meet) * 14}px)`, transform: `translateX(${(1 - meet) * 100}px)`, fontWeight: 600 }}>Meet</span>
+              </div>
+              <div
+                style={{
+                  transform: `translateZ(${(1 - land) * 1300}px) rotateX(${(1 - land) * 75}deg) rotateZ(${(1 - land) * -28}deg) scale(${0.85 + 0.15 * settle})`,
+                  filter: `drop-shadow(0 ${30 * land}px ${44 * land}px rgba(11,110,146,0.28))`,
+                }}
+              >
+                <OrdaMark size={176} id="meet" color="#12120F" />
+              </div>
+              <div style={{ width: 640 * name, overflow: "hidden" }}>
+                <span style={{ display: "inline-block", paddingLeft: 36, opacity: name, filter: `blur(${(1 - name) * 14}px)`, transform: `translateX(${(1 - name) * -120}px)` }}>GetOrda</span>
+              </div>
+            </div>
+          </Layer>
+          <Layer x={960} y={655} z={50}>
+            <div style={{ whiteSpace: "nowrap" }}>
+              <Kinetic text="Your AI employee, right inside *WhatsApp.*" f={f} times={w5} size={68} weight={550} align="center" color={C.ink2} />
+            </div>
+          </Layer>
+          <Layer x={960} y={770} z={90} s={live} o={Math.min(1, live)}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "12px 24px 12px 12px",
+                borderRadius: 999,
+                background: "#fff",
+                border: "1px solid #CBE5D6",
+                boxShadow: "0 16px 36px rgba(17,17,16,0.10)",
+                fontFamily: FONT,
+                fontSize: 25,
+                fontWeight: 650,
+                color: C.ok,
+                whiteSpace: "nowrap",
+              }}
+            >
+              <WAIcon size={40} />
+              <span style={{ width: 11, height: 11, borderRadius: 6, background: "#22A559", boxShadow: `0 0 0 ${5 + 3 * Math.sin(f / 5)}px rgba(34,165,89,0.18)` }} />
+              WhatsApp Live · replying 24/7
+            </div>
+          </Layer>
+        </World>
+        <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
           <div
             style={{
-              marginTop: 40,
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "12px 22px 12px 12px",
-              borderRadius: 999,
-              background: "#fff",
-              border: "1px solid #CBE5D6",
-              boxShadow: "0 12px 30px rgba(17,17,16,0.08)",
-              transform: `scale(${live})`,
-              opacity: Math.min(1, live),
-              fontFamily: FONT,
-              fontSize: 24,
-              fontWeight: 650,
-              color: C.ok,
+              width: 180 + ring * 1500,
+              height: 180 + ring * 1500,
+              marginTop: -140,
+              borderRadius: "50%",
+              border: `3px solid rgba(109,212,241,${0.8 * (1 - ring)})`,
+              boxShadow: `0 0 160px rgba(109,212,241,${0.45 * (1 - ring)}), inset 0 0 80px rgba(109,212,241,${0.3 * (1 - ring)})`,
             }}
-          >
-            <WAIcon size={38} />
-            <span style={{ width: 10, height: 10, borderRadius: 5, background: "#22A559", boxShadow: `0 0 0 ${4 + 3 * Math.sin(f / 5)}px rgba(34,165,89,0.18)` }} />
-            WhatsApp Live · replying 24/7
-          </div>
-        </div>
+          />
+        </AbsoluteFill>
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: "#fff", opacity: flash }} />
+      <Flare p={kf(f, [[0, 0], [5, 0.9, E.out], [40, 0, E.out]])} y={44} />
+      <Flash p={kf(f, [[-10, 1], [14, 0, E.out]])} />
     </AbsoluteFill>
   );
 };

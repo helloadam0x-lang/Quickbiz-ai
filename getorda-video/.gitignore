@@ -14,3 +14,5 @@ public/products/
 
 # Unsplash stock photos (downloaded via the Unsplash connector); kept out of the public repo
 public/stock/
+.cache/
+__pycache__/

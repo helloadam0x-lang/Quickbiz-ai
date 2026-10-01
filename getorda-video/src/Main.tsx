@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { Audio } from "@remotion/media";
 import { tween } from "./anim";
+import { E, kf } from "./motion";
 import { SCENES, SceneKey, T } from "./timeline";
 import { S01Hook } from "./scenes/S01Hook";
 import { S02Buzz } from "./scenes/S02Buzz";
@@ -14,19 +15,24 @@ import { S08Broadcast } from "./scenes/S08Broadcast";
 import { S09Tagline } from "./scenes/S09Tagline";
 import { S10Outro } from "./scenes/S10Outro";
 
-type Enter = "blur" | "fade" | "none";
+type Enter = { kind: "none" } | { kind: "fade" } | { kind: "blur" } | { kind: "cut"; at: number } | { kind: "iris"; x: number; y: number };
 
-// Scenes animate their own exits; the incoming one settles in from slightly small and soft.
-const Enter: React.FC<{ kind: Enter; children: React.ReactNode }> = ({ kind, children }) => {
+// Scenes choreograph their own exits; this only shapes how the incoming one appears.
+const In: React.FC<{ e: Enter; children: React.ReactNode }> = ({ e, children }) => {
   const f = useCurrentFrame();
-  if (kind === "none") return <AbsoluteFill>{children}</AbsoluteFill>;
+  if (e.kind === "none") return <AbsoluteFill>{children}</AbsoluteFill>;
+  if (e.kind === "cut") return f < e.at ? null : <AbsoluteFill>{children}</AbsoluteFill>;
+  if (e.kind === "iris") {
+    const r = kf(f, [[0, 0], [2 * T + 4, 2300, E.inOut]]);
+    return <AbsoluteFill style={{ clipPath: `circle(${r}px at ${e.x}px ${e.y}px)` }}>{children}</AbsoluteFill>;
+  }
   const p = tween(f, 0, 2 * T);
   return (
     <AbsoluteFill
       style={{
         opacity: p,
-        transform: kind === "blur" ? `scale(${0.94 + 0.06 * p})` : undefined,
-        filter: kind === "blur" && p < 1 ? `blur(${(1 - p) * 20}px)` : undefined,
+        transform: e.kind === "blur" ? `scale(${0.94 + 0.06 * p})` : undefined,
+        filter: e.kind === "blur" && p < 1 ? `blur(${(1 - p) * 20}px)` : undefined,
       }}
     >
       {children}
@@ -34,28 +40,28 @@ const Enter: React.FC<{ kind: Enter; children: React.ReactNode }> = ({ kind, chi
   );
 };
 
-const LIST: { key: SceneKey; C: React.FC; enter: Enter }[] = [
-  { key: "hook", C: S01Hook, enter: "none" },
-  { key: "buzz", C: S02Buzz, enter: "fade" },
-  { key: "lost", C: S03Lost, enter: "blur" },
-  { key: "meet", C: S04Meet, enter: "fade" },
-  { key: "chat", C: S05Chat, enter: "blur" },
-  { key: "needs", C: S06Needs, enter: "blur" },
-  { key: "store", C: S07Store, enter: "blur" },
-  { key: "broadcast", C: S08Broadcast, enter: "blur" },
-  { key: "tagline", C: S09Tagline, enter: "blur" },
-  { key: "outro", C: S10Outro, enter: "fade" },
+const LIST: { key: SceneKey; C: React.FC; e: Enter }[] = [
+  { key: "hook", C: S01Hook, e: { kind: "none" } },
+  { key: "buzz", C: S02Buzz, e: { kind: "fade" } },
+  { key: "lost", C: S03Lost, e: { kind: "fade" } },
+  { key: "meet", C: S04Meet, e: { kind: "none" } },
+  { key: "chat", C: S05Chat, e: { kind: "iris", x: 960, y: 770 } },
+  { key: "needs", C: S06Needs, e: { kind: "cut", at: 6 } },
+  { key: "store", C: S07Store, e: { kind: "blur" } },
+  { key: "broadcast", C: S08Broadcast, e: { kind: "blur" } },
+  { key: "tagline", C: S09Tagline, e: { kind: "blur" } },
+  { key: "outro", C: S10Outro, e: { kind: "none" } },
 ];
 
 export const Main: React.FC = () => (
   <AbsoluteFill style={{ backgroundColor: "#FBFDFE" }}>
-    {LIST.map(({ key, C, enter }) => {
+    {LIST.map(({ key, C, e }) => {
       const { start, len } = SCENES[key];
       return (
         <Sequence key={key} from={start - T} durationInFrames={len + 2 * T} name={key}>
-          <Enter kind={start === 0 ? "none" : enter}>
+          <In e={start === 0 ? { kind: "none" } : e}>
             <C />
-          </Enter>
+          </In>
         </Sequence>
       );
     })}

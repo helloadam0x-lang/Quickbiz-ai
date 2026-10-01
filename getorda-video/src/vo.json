@@ -1,609 +1,601 @@
 {
  "l01": {
   "start": 0.55,
-  "dur": 0.978,
+  "dur": 0.85,
   "text": "Let me guess.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Let",
-    "t": 0.05
+    "t": 0.0
    },
    {
     "w": "me",
-    "t": 0.293
+    "t": 0.209
    },
    {
     "w": "guess.",
-    "t": 0.537
+    "t": 0.325
    }
   ]
  },
  "l02": {
-  "start": 1.75,
-  "dur": 2.389,
+  "start": 1.65,
+  "dur": 2.49,
   "text": "Your phone hasn't stopped buzzing since morning.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Your",
-    "t": 0.04
+    "t": 0.0
    },
    {
     "w": "phone",
-    "t": 0.201
+    "t": 0.267
    },
    {
     "w": "hasn't",
-    "t": 0.469
+    "t": 0.546
    },
    {
     "w": "stopped",
-    "t": 0.845
+    "t": 0.824
    },
    {
     "w": "buzzing",
-    "t": 1.22
+    "t": 1.149
    },
    {
     "w": "since",
-    "t": 1.542
+    "t": 1.509
    },
    {
     "w": "morning.",
-    "t": 1.811
+    "t": 1.788
    }
   ]
  },
  "c1": {
   "start": 4.35,
-  "dur": 1.728,
+  "dur": 1.19,
   "text": "Hey, how much is this one?",
-  "voice": "am_michael",
-  "pan": -0.45,
+  "voice": "el-customer",
+  "pan": -0.35,
   "words": [
    {
     "w": "Hey,",
-    "t": 0.08
+    "t": 0.0
    },
    {
     "w": "how",
-    "t": 1.48
+    "t": 0.337
    },
    {
     "w": "much",
-    "t": 1.48
+    "t": 0.464
    },
    {
     "w": "is",
-    "t": 1.48
+    "t": 0.627
    },
    {
     "w": "this",
-    "t": 1.48
+    "t": 0.72
    },
    {
     "w": "one?",
-    "t": 1.48
+    "t": 0.906
    }
   ]
  },
  "c2": {
   "start": 5.25,
-  "dur": 1.365,
+  "dur": 1.19,
   "text": "Is it still available?",
-  "voice": "bf_emma",
-  "pan": 0.45,
+  "voice": "el-customer",
+  "pan": 0.15,
   "words": [
    {
     "w": "Is",
-    "t": 0.04
+    "t": 0.0
    },
    {
     "w": "it",
-    "t": 0.16
+    "t": 0.244
    },
    {
     "w": "still",
-    "t": 0.28
+    "t": 0.372
    },
    {
     "w": "available?",
-    "t": 0.58
+    "t": 0.639
    }
   ]
  },
  "c3": {
   "start": 6.05,
-  "dur": 1.856,
-  "text": "Can you deliver to Ntinda today?",
-  "voice": "am_adam",
-  "pan": -0.2,
+  "dur": 1.0,
+  "text": "Can you deliver today?",
+  "voice": "el-customer",
+  "pan": -0.35,
   "words": [
    {
     "w": "Can",
-    "t": 0.05
+    "t": 0.0
    },
    {
     "w": "you",
-    "t": 0.26
+    "t": 0.221
    },
    {
     "w": "deliver",
-    "t": 0.418
-   },
-   {
-    "w": "to",
-    "t": 0.785
-   },
-   {
-    "w": "Ntinda",
-    "t": 0.942
+    "t": 0.337
    },
    {
     "w": "today?",
-    "t": 1.415
+    "t": 0.662
    }
   ]
  },
  "c4": {
   "start": 7.15,
-  "dur": 1.28,
+  "dur": 1.24,
   "text": "Hello? Are you there?",
-  "voice": "af_nicole",
-  "pan": 0.3,
+  "voice": "el-customer",
+  "pan": 0.45,
   "words": [
    {
     "w": "Hello?",
-    "t": 0.06
+    "t": 0.0
    },
    {
     "w": "Are",
-    "t": 0.59
+    "t": 0.546
    },
    {
     "w": "you",
-    "t": 0.749
+    "t": 0.743
    },
    {
     "w": "there?",
-    "t": 0.908
+    "t": 0.871
    }
   ]
  },
  "l03": {
-  "start": 8.6,
-  "dur": 3.157,
+  "start": 8.55,
+  "dur": 3.499,
   "text": "And every message you miss... is a sale you just lost.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "And",
-    "t": 0.05
+    "t": 0.0
    },
    {
     "w": "every",
-    "t": 0.233
+    "t": 0.302
    },
    {
     "w": "message",
-    "t": 0.537
+    "t": 0.604
    },
    {
     "w": "you",
-    "t": 0.964
+    "t": 0.929
    },
    {
     "w": "miss...",
-    "t": 1.146
+    "t": 1.08
    },
    {
     "w": "is",
-    "t": 1.75
+    "t": 1.498
    },
    {
     "w": "a",
-    "t": 1.858
+    "t": 1.718
    },
    {
     "w": "sale",
-    "t": 2.021
+    "t": 1.8
    },
    {
     "w": "you",
-    "t": 2.292
+    "t": 2.136
    },
    {
     "w": "just",
-    "t": 2.454
+    "t": 2.31
    },
    {
     "w": "lost.",
-    "t": 2.779
+    "t": 2.577
    }
   ]
  },
  "l04": {
   "start": 12.25,
-  "dur": 1.067,
+  "dur": 1.12,
   "text": "Meet GetOrda.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Meet",
-    "t": 0.04
+    "t": 0.0
    },
    {
     "w": "GetOrda.",
-    "t": 0.313
+    "t": 0.372
    }
   ]
  },
  "l05": {
-  "start": 13.75,
-  "dur": 2.667,
+  "start": 13.7,
+  "dur": 2.76,
   "text": "Your AI employee, right inside WhatsApp.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Your",
-    "t": 0.07
+    "t": 0.0
    },
    {
     "w": "AI",
-    "t": 0.247
+    "t": 0.302
    },
    {
     "w": "employee,",
-    "t": 0.6
+    "t": 0.65
    },
    {
     "w": "right",
-    "t": 1.39
+    "t": 1.277
    },
    {
     "w": "inside",
-    "t": 1.666
+    "t": 1.556
    },
    {
     "w": "WhatsApp.",
-    "t": 2.053
+    "t": 2.009
    }
   ]
  },
  "l06": {
-  "start": 16.9,
-  "dur": 4.971,
+  "start": 16.85,
+  "dur": 5.57,
   "text": "It answers every customer, in their own language, from your real products and prices.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "It",
-    "t": 0.03
+    "t": 0.0
    },
    {
     "w": "answers",
-    "t": 0.176
+    "t": 0.267
    },
    {
     "w": "every",
-    "t": 0.613
+    "t": 0.801
    },
    {
     "w": "customer,",
-    "t": 0.977
+    "t": 1.242
    },
    {
     "w": "in",
-    "t": 1.8
+    "t": 1.846
    },
    {
     "w": "their",
-    "t": 1.953
+    "t": 1.997
    },
    {
     "w": "own",
-    "t": 2.106
+    "t": 2.218
    },
    {
     "w": "language,",
-    "t": 2.311
+    "t": 2.461
    },
    {
     "w": "from",
-    "t": 3.1
+    "t": 3.117
    },
    {
     "w": "your",
-    "t": 3.309
+    "t": 3.396
    },
    {
     "w": "real",
-    "t": 3.466
+    "t": 3.64
    },
    {
     "w": "products",
-    "t": 3.781
+    "t": 3.953
    },
    {
     "w": "and",
-    "t": 4.304
+    "t": 4.545
    },
    {
     "w": "prices.",
-    "t": 4.461
+    "t": 4.731
    }
   ]
  },
  "l07": {
-  "start": 22.3,
-  "dur": 5.248,
+  "start": 22.54,
+  "dur": 5.19,
   "text": "It takes the order, shares your mobile money details, and tracks it all the way to their door.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "It",
-    "t": 0.03
+    "t": 0.0
    },
    {
     "w": "takes",
-    "t": 0.144
+    "t": 0.174
    },
    {
     "w": "the",
-    "t": 0.485
+    "t": 0.464
    },
    {
     "w": "order,",
-    "t": 0.599
+    "t": 0.615
    },
    {
     "w": "shares",
-    "t": 1.29
+    "t": 1.126
    },
    {
     "w": "your",
-    "t": 1.593
+    "t": 1.509
    },
    {
     "w": "mobile",
-    "t": 1.776
+    "t": 1.66
    },
    {
     "w": "money",
-    "t": 2.2
+    "t": 1.962
    },
    {
     "w": "details,",
-    "t": 2.504
+    "t": 2.252
    },
    {
     "w": "and",
-    "t": 3.4
+    "t": 2.938
    },
    {
     "w": "tracks",
-    "t": 3.561
+    "t": 3.229
    },
    {
     "w": "it",
-    "t": 3.884
+    "t": 3.577
    },
    {
     "w": "all",
-    "t": 3.991
+    "t": 3.728
    },
    {
     "w": "the",
-    "t": 4.206
+    "t": 3.995
    },
    {
     "w": "way",
-    "t": 4.314
+    "t": 4.099
    },
    {
     "w": "to",
-    "t": 4.529
+    "t": 4.25
    },
    {
     "w": "their",
-    "t": 4.69
+    "t": 4.355
    },
    {
     "w": "door.",
-    "t": 4.851
+    "t": 4.564
    }
   ]
  },
  "l08": {
-  "start": 28.0,
-  "dur": 2.375,
+  "start": 27.95,
+  "dur": 2.859,
   "text": "And it only calls you when it truly needs you.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "And",
-    "t": 0.08
+    "t": 0.0
    },
    {
     "w": "it",
-    "t": 0.234
+    "t": 0.255
    },
    {
     "w": "only",
-    "t": 0.337
+    "t": 0.372
    },
    {
     "w": "calls",
-    "t": 0.646
+    "t": 0.65
    },
    {
     "w": "you",
-    "t": 0.954
+    "t": 1.045
    },
    {
     "w": "when",
-    "t": 1.109
+    "t": 1.231
    },
    {
     "w": "it",
-    "t": 1.314
+    "t": 1.416
    },
    {
     "w": "truly",
-    "t": 1.417
+    "t": 1.533
    },
    {
     "w": "needs",
-    "t": 1.777
+    "t": 2.032
    },
    {
     "w": "you.",
-    "t": 2.086
+    "t": 2.345
    }
   ]
  },
  "l09": {
-  "start": 30.9,
-  "dur": 1.856,
+  "start": 30.929,
+  "dur": 1.71,
   "text": "Your own store, live in a minute.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Your",
-    "t": 0.06
+    "t": 0.0
    },
    {
     "w": "own",
-    "t": 0.242
+    "t": 0.267
    },
    {
     "w": "store,",
-    "t": 0.485
+    "t": 0.441
    },
    {
     "w": "live",
-    "t": 1.04
+    "t": 0.848
    },
    {
     "w": "in",
-    "t": 1.234
+    "t": 1.045
    },
    {
     "w": "a",
-    "t": 1.351
+    "t": 1.126
    },
    {
     "w": "minute.",
-    "t": 1.467
+    "t": 1.184
    }
   ]
  },
  "l10": {
-  "start": 33.25,
-  "dur": 2.261,
+  "start": 33.2,
+  "dur": 2.15,
   "text": "Your best customers, back in one tap.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Your",
-    "t": 0.05
+    "t": 0.0
    },
    {
     "w": "best",
-    "t": 0.232
+    "t": 0.244
    },
    {
     "w": "customers,",
-    "t": 0.535
+    "t": 0.522
    },
    {
     "w": "back",
-    "t": 1.27
+    "t": 1.149
    },
    {
     "w": "in",
-    "t": 1.475
+    "t": 1.382
    },
    {
     "w": "one",
-    "t": 1.629
+    "t": 1.509
    },
    {
     "w": "tap.",
-    "t": 1.835
+    "t": 1.707
    }
   ]
  },
  "l11": {
-  "start": 36.25,
-  "dur": 2.155,
+  "start": 36.15,
+  "dur": 2.408,
   "text": "Every customer. Always answered.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "Every",
-    "t": 0.05
+    "t": 0.0
    },
    {
     "w": "customer.",
-    "t": 0.369
+    "t": 0.383
    },
    {
     "w": "Always",
-    "t": 1.13
+    "t": 1.057
    },
    {
     "w": "answered.",
-    "t": 1.621
+    "t": 1.486
    }
   ]
  },
  "l12": {
   "start": 39.15,
-  "dur": 2.773,
+  "dur": 3.23,
   "text": "GetOrda. Start free, at getorda dot app.",
-  "voice": "af_heart",
+  "voice": "sarah-v2",
   "pan": 0,
   "words": [
    {
     "w": "GetOrda.",
-    "t": 0.06
+    "t": 0.0
    },
    {
     "w": "Start",
-    "t": 0.84
+    "t": 0.985
    },
    {
     "w": "free,",
-    "t": 1.225
+    "t": 1.356
    },
    {
     "w": "at",
-    "t": 1.61
+    "t": 1.693
    },
    {
     "w": "getorda",
-    "t": 1.71
+    "t": 1.949
    },
    {
     "w": "dot",
-    "t": 2.16
+    "t": 2.552
    },
    {
     "w": "app.",
-    "t": 2.41
+    "t": 2.877
    }
   ]
  }

@@ -280,20 +280,52 @@ def thud(g=0.6):
 
 
 # ------------------------------------------------------- premium instruments
+# Real grand piano: the Salamander Grand (Yamaha C5, CC-BY 3.0, Alexander Holm), sampled every
+# minor third; notes in between are resampled from the nearest sample.
+SAL_DIR = os.path.join(ROOT, ".cache", "salamander")
+SAL_URL = "https://raw.githubusercontent.com/Tonejs/audio/master/salamander/{}.mp3"
+_SAL = {}
+
+
+def _decode(path):
+    import subprocess
+    ff = os.environ.get("FFMPEG", "ffmpeg")
+    raw = subprocess.run([ff, "-v", "error", "-i", path, "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, dtype=np.float32).astype(np.float64)
+
+
+def _salamander():
+    if _SAL:
+        return _SAL
+    import urllib.request
+    os.makedirs(SAL_DIR, exist_ok=True)
+    for octave in range(2, 8):
+        for name, pc in (("C", 0), ("Ds", 3), ("Fs", 6), ("A", 9)):
+            f = os.path.join(SAL_DIR, f"{name}{octave}.mp3")
+            if not os.path.exists(f):
+                urllib.request.urlretrieve(SAL_URL.format(f"{name}{octave}"), f)
+            x = _decode(f)
+            on = np.argmax(np.abs(x) > 0.01 * np.abs(x).max())
+            x = x[max(0, on - 48):]
+            _SAL[12 * (octave + 1) + pc] = x / np.abs(x).max()
+    return _SAL
+
+
 def felt_piano(n, dur=2.5, vel=0.8):
-    """Soft felt piano: slightly inharmonic partials, faster decay up high, hammer thump."""
-    t = t_(dur)
-    f = midi(n)
-    s = np.zeros(len(t))
-    for k in range(1, 9):
-        fk = f * k * np.sqrt(1 + 0.00035 * k * k)
-        if fk > 9000:
-            break
-        amp = (0.9 ** k) / k ** 0.6
-        s += amp * np.sin(2 * np.pi * fk * t + k) * np.exp(-t * (0.9 + 0.55 * k + n / 60))
-    thump = flt(rng.standard_normal(len(t)), "low", 900) * np.exp(-t * 90) * 0.15
-    s = (s + thump) * np.minimum(t / 0.006, 1) * env(len(t), 0.004, 0.25)
-    return flt(s, "low", 1800 + 2600 * vel) * 0.11 * vel
+    """Sampled grand, voiced soft: darker and quieter as velocity drops, damped at `dur`."""
+    bank = _salamander()
+    m = min(bank, key=lambda k: abs(k - n))
+    x = bank[m]
+    r = 2 ** ((n - m) / 12)
+    need = int((dur + 0.35) * SR)
+    pos = np.arange(0, min(len(x) - 1, need * r), r)
+    y = np.interp(pos, np.arange(len(x)), x)
+    if len(y) < need:
+        y = np.pad(y, (0, need - len(y)))
+    rel = int(0.35 * SR)
+    y[-rel:] *= np.linspace(1, 0, rel) ** 2
+    y = flt(y, "low", 1400 + 6500 * vel)
+    return y * 0.13 * vel**1.3
 
 
 def piano_chord(notes, dur=3.0, vel=0.75, roll=0.025):
@@ -384,7 +416,6 @@ music.add(air(5.0, 0.012), 7.0)
 for i in range(16):
     n = [64, 67, 71, 72][i % 4] + (12 if i >= 8 else 0)
     music.add(glass_pluck(n, 0.4, 0.035 + 0.04 * i / 16, cutoff=1500 + 250 * i), DROP - 2.4 + i * STEP, pan=-0.3 if i % 2 else 0.3)
-sfx.add(riser(2.4, 0.33), DROP - 2.4)
 
 # Main section (12-36s): clean, uplifting, sidechained four-on-the-floor.
 ARP = [0, 2, 1, 3, 2, 1, 3, 2]
@@ -418,7 +449,6 @@ music.add(piano_chord([n + 12 for n in FMAJ9[1]], 2.4, 0.7), BREAK, gain=1.0)
 send.add(piano_chord([n + 12 for n in FMAJ9[1]], 2.4, 0.7), BREAK, gain=0.6)
 for k, n in enumerate([72, 74, 76, 79]):
     music.add(felt_piano(n, 1.4, 0.5), BREAK + 1.2 + k * STEP * 2, pan=0.15)
-sfx.add(riser(1.4, 0.3), FINAL - 1.4)
 
 # Final (38.4s-end): one big warm Cmaj9 bloom, gentle pulse under the CTA.
 final = [48, 55, 59, 62, 64, 71]
@@ -439,89 +469,220 @@ for i, n in enumerate([72, 76, 79, 83, 86, 88]):
     send.add(bell(midi(n), 2.4, 0.05, 0.8, 1.5), FINAL + 0.35 + i * 0.08, gain=0.8)
 
 # ----------------------------------------------------------------------- cues
-# S02 buzz (scene start 50): pings + phone vibration.
+# Cue times follow the picture: scene starts are fixed, word times come from vo.json, so the
+# same events the scenes key off (stamp on "lost", the tap, the click) land here too.
+VOJ = json.load(open(os.path.join(ROOT, "src", "vo.json")))
+SC = {"hook": 0, "buzz": 50, "lost": 252, "meet": 360, "chat": 498, "needs": 834, "store": 918, "broadcast": 990, "tagline": 1080, "outro": 1152}
+
+
+def wf(key, i):
+    """Global frame of word i of a VO line (same rounding as timeline.ts)."""
+    line = VOJ[key]
+    return int(round((line["start"] + line["words"][i]["t"]) * FPS))
+
+
+def vat(key):
+    return int(round(VOJ[key]["start"] * FPS))
+
+
+# ElevenLabs one-shots, when present, replace the synthesized versions name by name.
+EL_SFX = os.path.join(ROOT, "public", "el", "sfx")
+_el_cache, _el_rr = {}, {}
+
+
+def el_sample(name):
+    files = sorted(f for f in os.listdir(EL_SFX) if f.startswith(name + "_")) if os.path.isdir(EL_SFX) else []
+    if not files:
+        return None
+    k = _el_rr.get(name, 0)
+    _el_rr[name] = k + 1
+    f = files[k % len(files)]
+    if f not in _el_cache:
+        _el_cache[f] = decode(os.path.join(EL_SFX, f))
+    return _el_cache[f]
+
+
+def decode(path):
+    import subprocess
+    ff = os.environ.get("FFMPEG", "ffmpeg")
+    raw = subprocess.run([ff, "-v", "error", "-i", path, "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, dtype=np.float32).copy()
+    fade = min(len(x), int(0.004 * SR))
+    x[-fade:] *= np.linspace(1, 0, fade)
+    return x
+
+
+SYNTH = {
+    "whoosh_soft": lambda: whoosh(0.6, 200, 3200, 0.22, -0.4, 0.4),
+    "whoosh_whip": lambda: whoosh(0.32, 600, 7000, 0.3, -0.6, 0.6),
+    "riser_rush": lambda: riser(1.2, 0.3),
+    "swell": lambda: riser(1.6, 0.22),
+    "logo_impact": lambda: impact(1.0) + 0,
+    "sub_drop": lambda: impact(0.6),
+    "notif": lambda: ping(g=0.18),
+    "pop": lambda: bubble_in(0.2),
+    "click": lambda: click(1.2),
+    "tick": lambda: blip(1175, 0.08, 0.14),
+    "success": lambda: chime((79, 84, 88, 91), 0.09, 0.045),
+    "stamp": lambda: thud(0.6),
+    "card_flip": lambda: whoosh(0.25, 900, 6000, 0.12, 0.2, 0.6),
+    "burst": lambda: sparkle(0.8, 22, 0.05),
+    "confetti": lambda: sparkle(0.6, 16, 0.05),
+}
+# Relative levels so EL one-shots sit like the synthesized ones (EL files come in hot).
+EL_GAIN = {"whoosh_soft": 0.32, "whoosh_whip": 0.34, "riser_rush": 0.4, "swell": 0.36, "logo_impact": 0.6, "sub_drop": 0.45,
+           "notif": 0.3, "pop": 0.26, "click": 0.4, "tick": 0.26, "success": 0.3, "stamp": 0.5, "card_flip": 0.3,
+           "burst": 0.34, "confetti": 0.3, "clock": 0.2, "ui_build": 0.26, "typing": 0.22}
+
+
+def play(name, frame, g=1.0, pan=0.0, end=None, bus=None):
+    """Place a named one-shot at a (fractional) frame; `end` aligns the sample's END to that frame."""
+    x = el_sample(name)
+    if x is not None:
+        x = x * EL_GAIN.get(name, 0.3)
+    elif name in SYNTH:
+        x = SYNTH[name]()
+    else:
+        return
+    t = fr(frame) if end is None else fr(end) - len(x) / SR
+    (bus or sfx).add(x * g, max(0.0, t), pan=pan)
+
+
+def clock_ticks(f0, f1, step=3):
+    if el_sample("clock") is not None:
+        play("clock", f0, 0.9)
+        return
+    for k in range(f0, f1, step):
+        sfx.add(blip(1600, 0.025, 0.05), fr(k), pan=0.2)
+
+
+def typing(f0, n, pan=-0.3):
+    if el_sample("typing") is not None:
+        play("typing", f0, 1.0, pan)
+        return
+    for k in range(n):
+        sfx.add(key(0.8), fr(f0 + k * 1.1), pan=pan)
+
+
+def ui_build(f0, n=4, step=4, pan=0.0):
+    if el_sample("ui_build") is not None:
+        play("ui_build", f0, 1.0, pan)
+        return
+    for i in range(n):
+        sfx.add(blip(880 + i * 140, 0.07, 0.11), fr(f0 + i * step), pan=pan + i * 0.1)
+
+
+# S01 hook: ellipsis becomes a typing bubble, camera dives in.
+play("pop", 36, 0.8, 0.1)
+play("riser_rush", 0, 0.9, end=58)
+
+# S02 buzz: ambient pings, then the camera snaps to each customer, burst, rush into Amina.
+B = SC["buzz"]
 for p in [16, 32, 44, 56, 68]:
-    sfx.add(ping(g=0.17), fr(50 + p), pan=0.35)
-    sfx.add(vibrate(), fr(50 + p) + 0.02, pan=0.35)
-sfx.add(whoosh(0.6, 150, 1600, 0.3, 0.6, 0.2), fr(46))
-for c, pan in [(130.5, -0.4), (157.5, 0.1), (181.5, -0.4), (214.5, 0.45)]:
-    sfx.add(ping(880, 1319, 0.2), fr(c) - 0.05, pan=pan)
-    sfx.add(vibrate(0.28, 0.12), fr(c), pan=0.35)
-sfx.add(whoosh(0.5, 400, 5000, 0.32), fr(238))
+    play("notif", B + p, 0.55, 0.35)
+    sfx.add(vibrate(0.3, 0.1), fr(B + p) + 0.02, pan=0.35)
+for k, pan in [("c1", -0.35), ("c2", 0.15), ("c3", -0.35), ("c4", 0.45)]:
+    play("notif", vat(k) - 2, 0.9, pan)
+    sfx.add(vibrate(0.28, 0.1), fr(vat(k)), pan=pan)
+for at in [B + 79, B + 106, B + 130, B + 163]:
+    play("whoosh_soft", at, 0.55, 0.0)
+for i in range(8):
+    play("notif", B + 176 + i * 2.5, 0.32, -0.7 + i * 0.2)
+play("riser_rush", 0, 1.0, end=B + 210)
 
-# S03 lost (252): the stamp on "lost".
-sfx.add(whoosh(0.45, 200, 2500, 0.2, -0.5, 0), fr(246))
-sfx.add(thud(0.55), fr(341))
-sfx.add(bell(midi(62), 0.6, 0.06, 2.5, 6) + 0 * 1, fr(341), pan=-0.1)
-sfx.add(bell(midi(63), 0.6, 0.05, 2.5, 6), fr(342), pan=0.1)
+# S03 lost: clock rolls, the stamp lands on "lost", the card falls away.
+L = SC["lost"]
+clock_ticks(L + 6, L + 54)
+lost = wf("l03", 10)
+play("stamp", lost, 1.0, -0.15)
+play("sub_drop", lost, 0.5)
+play("whoosh_soft", lost + 8, 0.45, -0.2)
+play("swell", 0, 0.9, end=SC["meet"] - 1)
 
-# S04 meet (360): the drop.
-sfx.add(impact(1.0), DROP)
-send.add(impact(0.4), DROP)
-sfx.add(sparkle(0.6, 16, 0.05), DROP + 0.05)
-sfx.add(whoosh(0.4, 600, 4000, 0.18, -0.5, 0.1), fr(366))
-sfx.add(whoosh(0.45, 500, 5200, 0.22, 0.0, 0.6), fr(374))
-sfx.add(blip(1046, 0.12, 0.16), fr(478))
-sfx.add(whoosh(0.55, 300, 4500, 0.3), fr(484))
+# S04 meet: the logo slam on the drop, words, the Live pill.
+M = SC["meet"]
+play("logo_impact", M - 1, 1.0)
+send.add(impact(0.35), DROP)
+play("whoosh_soft", wf("l04", 1) - 3, 0.4, 0.3)
+play("whoosh_soft", wf("l05", 0) - 12, 0.3, -0.2)
+play("pop", wf("l05", 5) + 4, 0.7, 0.1)
 
-# S05 chat (498): messages, catalog, order, MoMo, tracking.
-sfx.add(whoosh(0.6, 140, 1500, 0.25, -0.6, -0.2), fr(492))
-sfx.add(bubble_in(), fr(502), pan=-0.4)
-for k in range(520, 540, 5):
-    sfx.add(key(0.7), fr(k), pan=-0.4)
-sfx.add(sent(), fr(542), pan=-0.35)
+# S05 chat: iris in, conversation, orbit, catalog, whip, order, MoMo, tracker.
+C = SC["chat"]
+a = [wf("l06", i) - C for i in range(14)]
+b = [wf("l07", i) - C for i in range(18)]
+play("whoosh_soft", C - 8, 0.6, -0.3)
+play("pop", C + 4, 0.8, -0.4)
+typing(C + 20, 12, -0.4)
+play("pop", C + 40, 0.8, -0.3)
+play("whoosh_soft", C + 24, 0.4, 0.2)
 for i in range(5):
-    sfx.add(blip(880 + i * 120, 0.08, 0.12), fr(576 + i * 4), pan=0.1 + i * 0.12)
+    play("tick", C + a[7] - 4 + i * 3, 0.6, -0.5 + i * 0.25)
+play("whoosh_soft", C + a[4], 0.4, -0.3)
+play("whoosh_soft", C + a[8], 0.5, 0.5)
 for i in range(4):
-    sfx.add(whoosh(0.22, 900, 5000, 0.07, 0.0, 0.5), fr(605 + i * 4))
-sfx.add(sent(0.18), fr(611), pan=-0.35)
-sfx.add(chime((79, 84, 88), 0.08, 0.04), fr(641), pan=0.2)
-sfx.add(bubble_in(0.2), fr(666), pan=-0.4)
-for k in range(678, 687, 4):
-    sfx.add(key(0.7), fr(k), pan=-0.4)
-sfx.add(sent(), fr(687), pan=-0.35)
-sfx.add(whoosh(0.35, 300, 3000, 0.16, 0.3, 0.6), fr(683))
-for i, at in enumerate([691, 701, 776, 798, 815]):
-    sfx.add(blip(660 * 2 ** (i * 2 / 12), 0.1, 0.16), fr(at), pan=0.2 + i * 0.08)
-sfx.add(sent(0.18), fr(708), pan=-0.35)
-sfx.add(blip(740, 0.1, 0.14), fr(720), pan=0.5)
-sfx.add(bubble_in(0.18), fr(757), pan=-0.4)
-sfx.add(chime((88, 91, 96), 0.08, 0.035), fr(768), pan=0.5)
-sfx.add(chime((79, 83, 86, 91), 0.1, 0.05), fr(815), pan=0.25)
-sfx.add(whoosh(0.5, 300, 4500, 0.3), fr(822))
+    play("card_flip", C + a[10] - 10 + i * 4, 0.45, 0.2 + i * 0.15)
+play("pop", C + a[10], 0.6, -0.3)
+play("tick", C + a[13], 0.9, 0.3)
+play("whoosh_whip", C + 162, 0.9, -0.5)
+play("pop", C + b[0] - 4, 0.7, -0.4)
+typing(C + b[0] + 8, 8, -0.4)
+play("pop", C + b[3], 0.8, -0.3)
+play("success", C + b[3] + 2, 0.45, -0.2)
+play("whoosh_soft", C + b[4] - 6, 0.45, 0.2)
+play("pop", C + b[4], 0.7, -0.3)
+play("card_flip", C + b[6] - 4, 0.9, 0.4)
+play("pop", C + b[9] - 14, 0.6, -0.4)
+play("success", C + b[9], 0.9, 0.4)
+play("whoosh_soft", C + b[9] - 2, 0.5, 0.5)
+step_at = [b[9], b[9] + 5, b[10] + 2, b[14], b[17]]
+for i, s_ in enumerate(step_at):
+    play("tick", C + s_, 0.55 + 0.1 * i, 0.3 + i * 0.08)
+play("confetti", C + step_at[4], 0.9, 0.4)
+play("whoosh_whip", C + 326, 1.0, 0.5)
 
-# S06 needs (834): the "Needs you" flag and push.
-sfx.add(whoosh(0.5, 200, 2200, 0.2, -0.3, 0.3), fr(826))
-for k in range(0, 50, 7):
-    sfx.add(blip(1400, 0.03, 0.03), fr(834 + k), pan=0.2)
-sfx.add(bell(midi(76), 0.7, 0.13, 1.0, 5, 2.0), fr(891), pan=0.1)
-sfx.add(bell(midi(83), 0.8, 0.12, 1.0, 5, 2.0), fr(891) + 0.12, pan=0.2)
-sfx.add(whoosh(0.3, 1200, 6000, 0.12, 0.6, 0.4), fr(895))
-sfx.add(whoosh(0.5, 300, 4500, 0.28), fr(910))
+# S06 needs: whip-in, the scroll, the flag, the push.
+N_ = SC["needs"]
+needs_at = wf("l08", 8) - 2
+for k in range(N_ + 2, needs_at - 6, 4):
+    sfx.add(blip(1500, 0.022, 0.035), fr(k), pan=0.1)
+play("tick", needs_at, 0.9, 0.1)
+play("notif", needs_at + 6, 0.9, 0.5)
+play("whoosh_soft", needs_at + 4, 0.3, 0.6)
+play("whoosh_soft", SC["store"] - 8, 0.5, 0.0)
 
-# S07 store (918): typing the URL, Live.
-sfx.add(whoosh(0.5, 160, 2000, 0.24, 0.7, 0.3), fr(912))
-for k in range(20):
-    sfx.add(key(), fr(918 + k), pan=-0.3)
-sfx.add(chime((84, 91), 0.09, 0.05), fr(956), pan=-0.3)
-sfx.add(whoosh(0.5, 300, 4500, 0.28), fr(982))
+# S07 store: URL typed, storefront builds, Live.
+S_ = SC["store"]
+typing(S_ - 4, 18, -0.4)
+ui_build(S_ + 14, 4, 4, 0.3)
+play("pop", wf("l09", 3) - 2, 0.8, -0.3)
+play("success", wf("l09", 3), 0.4, -0.3)
+play("whoosh_soft", SC["broadcast"] - 8, 0.5, 0.0)
 
-# S08 broadcast (990): the one tap.
-sfx.add(click(1.3), fr(1053), pan=-0.3)
-sfx.add(whoosh(0.4, 700, 7500, 0.3, -0.4, 0.6), fr(1054))
+# S08 broadcast: the one tap and 43 customers lighting up.
+tap = wf("l10", 6)
+play("whoosh_soft", SC["broadcast"] + 8, 0.4, -0.3)
+play("click", tap, 1.0, -0.3)
+play("burst", tap + 1, 1.0, 0.0)
 for i in range(6):
-    sfx.add(pluck(76 + [0, 3, 5, 7, 10, 12][i], 0.3, 0.07), fr(1055 + i * 2), pan=-0.6 + i * 0.24)
-sfx.add(chime((88, 91, 96, 100), 0.07, 0.04), fr(1066), pan=0.1)
-sfx.add(whoosh(0.5, 300, 4500, 0.26), fr(1072))
+    sfx.add(pluck(76 + [0, 3, 5, 7, 10, 12][i], 0.3, 0.05), fr(tap + 3 + i * 3), pan=-0.6 + i * 0.24)
+play("success", tap + 22, 0.5, 0.1)
 
-# S09 tagline + S10 outro.
-sfx.add(impact(1.05), FINAL)
-send.add(impact(0.45), FINAL)
-sfx.add(sparkle(0.7, 18, 0.05), FINAL + 0.05)
-sfx.add(whoosh(0.45, 500, 5200, 0.22, 0.0, 0.6), fr(1172))
-sfx.add(blip(988, 0.12, 0.16), fr(1196))
-sfx.add(click(1.2), fr(1228), pan=0.2)
-sfx.add(sparkle(0.4, 10, 0.05), fr(1230))
+# S09 tagline: fly-through, then the swell into the final hit.
+T_ = SC["tagline"]
+play("whoosh_soft", T_ - 6, 0.5, 0.0)
+play("whoosh_soft", T_ + 30, 0.3, -0.4)
+play("swell", 0, 1.0, end=SC["outro"] - 1)
+
+# S10 outro: logo slam, wordmark, CTA, the click.
+O = SC["outro"]
+play("logo_impact", O - 1, 1.05)
+send.add(impact(0.4), FINAL)
+play("whoosh_soft", wf("l12", 0) - 4, 0.4, 0.3)
+play("pop", wf("l12", 1) - 4, 0.7, 0.0)
+cta_click = wf("l12", 4) + 2
+play("click", cta_click, 1.0, 0.2)
+play("confetti", cta_click + 2, 0.5, 0.2)
 
 # ------------------------------------------------------------------------- VO
 vo = Bus()
@@ -535,20 +696,21 @@ def load(key):
 
 
 def narrator_chain(x):
-    x = flt(x, "high", 80)
-    x = shelf(x, 180, 1.5, high=False)
-    x = peak_eq(x, 3200, 2.5, 1.0)
-    x = shelf(x, 10000, 2.0, high=True)
+    # ElevenLabs reads arrive clean and already bright: a light polish, not a rebuild.
+    x = flt(x, "high", 70)
+    x = shelf(x, 200, 1.0, high=False)
+    x = peak_eq(x, 3500, 1.2, 0.9)
+    x = shelf(x, 11000, 1.2, high=True)
     # De-esser: duck the 5.5-9k band when it spikes.
     s = flt(x, "band", [5500, 9000])
     lvl = np.sqrt(flt(s**2, "low", 40, 1).clip(1e-12))
-    thr = np.percentile(lvl, 90)
-    g = np.minimum(1, (thr / np.maximum(lvl, 1e-9)) ** 0.6)
+    thr = np.percentile(lvl, 92)
+    g = np.minimum(1, (thr / np.maximum(lvl, 1e-9)) ** 0.5)
     x = x - s + s * g
-    # Compressor 3:1.
+    # Gentle 2.2:1 compression to sit forward in the mix.
     lv = np.sqrt(flt(x**2, "low", 18, 1).clip(1e-12))
     db = 20 * np.log10(lv / lv.max())
-    gr = np.minimum(0, -(db + 18) * (1 - 1 / 3))
+    gr = np.minimum(0, -(db + 16) * (1 - 1 / 2.2))
     x = x * 10 ** (gr / 20)
     return x / np.max(np.abs(x)) * 0.89
 
