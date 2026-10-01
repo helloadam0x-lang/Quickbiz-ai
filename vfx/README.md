@@ -14,6 +14,18 @@ swap at 480p; only clothing pixels are used, upscaled with ESPCN, colour- and gr
 `glasses` (product photo; `glasses_tinted` true/false/null) and optional `product`
 (`{"image", "track": "hand"|"surface", "box": [x, y, w, h], "frame"}`).
 
+Outfit swap without a GPU (reference product photos, one outfit per section, switched on cues):
+
+```bash
+python3 pipeline/body.py in.mp4 work/        # pose (One-Euro smoothed) + multiclass body/clothes masks
+python3 pipeline/tryon.py job.json           # rebuilds shirt + re-dyes trousers, face/hair/skin untouched
+python3 pipeline/enhance.py out.mp4 hd.mp4 1072 1920 in.mp4   # temporal denoise, ESPCN x2, sharpen, grain
+```
+
+`tryon` job: `source`, `work`, `out`, `plan` (`[[start_frame, outfit], ...]`), `exposure`, `switch_glow`
+and `outfits`, each with the photo `image`, `body` (`[xL, xR, y_shoulder, y_hem]` of the shirt in the
+photo), `base_box` (plain fabric), `decals`, optional `sleeve` and `collar` boxes, and `pants_box`.
+
 `bridge/gpu_job.py` runs a Hugging Face Space job (upload inputs, run on the free ZeroGPU quota,
 download outputs) from a machine whose network policy allows huggingface.co.
 
